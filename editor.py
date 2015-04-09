@@ -219,8 +219,9 @@ class Editor:
                 break
             if self.handle_cursor_keys(key):
                 continue
-            if self.handle_key(key) == KEY_QUIT:
-                break
+            res = self.handle_key(key)
+            if res is not None:
+                return res
 
     def handle_key(self, key):
             l = self.content[self.cur_line]
