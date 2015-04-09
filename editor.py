@@ -17,6 +17,8 @@ KEY_PGUP = 7
 KEY_PGDN = 8
 KEY_QUIT = 9
 KEY_ENTER = 10
+KEY_BACKSPACE = 11
+KEY_DELETE = 12
 
 KEYMAP = {
 b"\x1b[A": KEY_UP,
@@ -31,6 +33,8 @@ b"\x1b[5~": KEY_PGUP,
 b"\x1b[6~": KEY_PGDN,
 b"\x03": KEY_QUIT,
 b"\r": KEY_ENTER,
+b"\x7f": KEY_BACKSPACE,
+b"\x1b[3~": KEY_DELETE,
 }
 
 
@@ -233,6 +237,16 @@ class Editor:
                 self.col = 0
                 self.next_line()
                 self.update_screen()
+            elif key == KEY_BACKSPACE:
+                if self.col:
+                    self.col -= 1
+                    l = l[:self.col] + l[self.col + 1:]
+                    self.content[self.cur_line] = l
+                    self.update_line()
+            elif key == KEY_DELETE:
+                l = l[:self.col] + l[self.col + 1:]
+                self.content[self.cur_line] = l
+                self.update_line()
             else:
                 l = l[:self.col] + str(key, "utf-8") + l[self.col:]
                 self.content[self.cur_line] = l
