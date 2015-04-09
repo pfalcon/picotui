@@ -40,7 +40,7 @@ b"\x1b[3~": KEY_DELETE,
 
 class Editor:
 
-    def __init__(self, left=0, top=0, height=25):
+    def __init__(self, left=0, top=0, width=80, height=25):
         self.top_line = 0
         self.cur_line = 0
         self.row = 0
@@ -48,6 +48,7 @@ class Editor:
         self.left = left
         self.top = top
         self.height = height
+        self.width = width
 
     def enable_mouse(self):
         # Mouse reporting - X10 compatbility mode
@@ -72,6 +73,12 @@ class Editor:
     @staticmethod
     def clear_to_eol():
         Editor.wr(b"\x1b[0K")
+
+    # Clear specified number of positions
+    @staticmethod
+    def clear_num_pos(num):
+        if num > 0:
+            Editor.wr("\x1b[%dX" % num)
 
     @staticmethod
     def cursor(onoff):
@@ -99,9 +106,7 @@ class Editor:
         self.cursor(True)
 
     def adjust_cursor_eol(self):
-        l = len(self.content[self.cur_line])
-        if self.col > l:
-            self.col = l
+        self.col = min(self.col, self.width - 1, len(self.content[self.cur_line]))
 
     def set_lines(self, lines):
         self.content = lines
@@ -109,14 +114,11 @@ class Editor:
 
     def update_screen(self):
         self.cursor(False)
-        self.cls()
         i = self.top_line
         r = self.top
         for c in range(self.height):
             self.goto(r, self.left)
             self.show_line(self.content[i])
-            #clear_eol()
-            self.wr(b"\r\n")
             i += 1
             if i == self.total_lines:
                 break
@@ -128,13 +130,14 @@ class Editor:
     def update_line(self):
         self.cursor(False)
         self.goto(self.row + self.top, self.left)
-#        self.wr(b"\r")
         self.show_line(self.content[self.cur_line])
         self.set_cursor()
         self.cursor(True)
 
     def show_line(self, l):
+        l = l[:self.width]
         self.wr(l)
+        self.clear_num_pos(self.width - len(l))
 
     def next_line(self):
         if self.row + 1 == self.height:
@@ -181,6 +184,7 @@ class Editor:
             self.set_cursor()
         elif key == KEY_END:
             self.col = len(self.content[self.cur_line])
+            self.adjust_cursor_eol()
             self.set_cursor()
         elif key == KEY_PGUP:
             self.cur_line -= self.height
@@ -256,6 +260,7 @@ class Editor:
                 l = l[:self.col] + str(key, "utf-8") + l[self.col:]
                 self.content[self.cur_line] = l
                 self.col += 1
+                self.adjust_cursor_eol()
                 self.update_line()
 
     def init_tty(self):
