@@ -40,12 +40,14 @@ b"\x1b[3~": KEY_DELETE,
 
 class Editor:
 
-    def __init__(self):
+    def __init__(self, left=0, top=0, height=25):
         self.top_line = 0
         self.cur_line = 0
         self.row = 0
         self.col = 0
-        self.win_height = 25
+        self.left = left
+        self.top = top
+        self.height = height
 
     def enable_mouse(self):
         # Mouse reporting - X10 compatbility mode
@@ -79,7 +81,7 @@ class Editor:
             Editor.wr(b"\x1b[?25l")
 
     def set_cursor(self):
-        self.goto(self.row, self.col)
+        self.goto(self.row + self.top, self.col + self.left)
 
     def show_status(self, msg):
         self.cursor(False)
@@ -107,23 +109,26 @@ class Editor:
 
     def update_screen(self):
         self.cursor(False)
-        self.goto(0, 0)
         self.cls()
         i = self.top_line
-        for c in range(self.win_height):
+        r = self.top
+        for c in range(self.height):
+            self.goto(r, self.left)
             self.show_line(self.content[i])
             #clear_eol()
             self.wr(b"\r\n")
             i += 1
             if i == self.total_lines:
                 break
+            r += 1
         self.show_cursor_status()
         self.set_cursor()
         self.cursor(True)
 
     def update_line(self):
         self.cursor(False)
-        self.wr(b"\r")
+        self.goto(self.row + self.top, self.left)
+#        self.wr(b"\r")
         self.show_line(self.content[self.cur_line])
         self.set_cursor()
         self.cursor(True)
@@ -132,7 +137,7 @@ class Editor:
         self.wr(l)
 
     def next_line(self):
-        if self.row + 1 == self.win_height:
+        if self.row + 1 == self.height:
             self.top_line += 1
             return True
             self.update_screen()
@@ -178,8 +183,8 @@ class Editor:
             self.col = len(self.content[self.cur_line])
             self.set_cursor()
         elif key == KEY_PGUP:
-            self.cur_line -= self.win_height
-            self.top_line -= self.win_height
+            self.cur_line -= self.height
+            self.top_line -= self.height
             if self.top_line < 0:
                 self.top_line = 0
                 self.cur_line = 0
@@ -190,17 +195,17 @@ class Editor:
             self.adjust_cursor_eol()
             self.update_screen()
         elif key == KEY_PGDN:
-            self.cur_line += self.win_height
-            self.top_line += self.win_height
+            self.cur_line += self.height
+            self.top_line += self.height
             if self.cur_line >= self.total_lines:
-                self.top_line = self.total_lines - self.win_height
+                self.top_line = self.total_lines - self.height
                 self.cur_line = self.total_lines - 1
-                self.row = self.win_height - 1
+                self.row = self.height - 1
             self.adjust_cursor_eol()
             self.update_screen()
         elif isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
             row = key[5] - 33
-            if row < self.win_height:
+            if row < self.height:
                 self.row = row
                 self.col = key[4] - 33
                 self.cur_line = self.top_line + self.row
@@ -219,7 +224,7 @@ class Editor:
                 key = KEYMAP[key]
             if key == KEY_QUIT:
                 # Don't leave cursor in the middle of screen
-                self.goto(self.win_height, 0)
+                self.goto(self.height, 0)
                 break
             if self.handle_cursor_keys(key):
                 continue
