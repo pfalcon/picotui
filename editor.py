@@ -227,8 +227,6 @@ class Editor:
             if key in KEYMAP:
                 key = KEYMAP[key]
             if key == KEY_QUIT:
-                # Don't leave cursor in the middle of screen
-                self.goto(self.height, 0)
                 break
             if self.handle_cursor_keys(key):
                 continue
@@ -269,6 +267,8 @@ class Editor:
         tty.setraw(0)
 
     def deinit_tty(self):
+        # Don't leave cursor in the middle of screen
+        self.goto(self.height, 0)
         import termios
         termios.tcsetattr(0, termios.TCSANOW, self.org_termios)
 
