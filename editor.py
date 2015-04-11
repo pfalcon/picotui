@@ -118,10 +118,11 @@ class Editor:
         r = self.top
         for c in range(self.height):
             self.goto(r, self.left)
-            self.show_line(self.content[i])
-            i += 1
             if i == self.total_lines:
-                break
+                self.clear_num_pos(self.width)
+            else:
+                self.show_line(self.content[i])
+                i += 1
             r += 1
         self.show_cursor_status()
         self.set_cursor()
