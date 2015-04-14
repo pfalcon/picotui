@@ -223,17 +223,26 @@ class Editor:
     def loop(self):
         self.update_screen()
         while True:
-            key = os.read(0, 32)
-            self.show_status(repr(key))
-            if key in KEYMAP:
-                key = KEYMAP[key]
-            if key == KEY_QUIT:
-                break
-            if self.handle_cursor_keys(key):
-                continue
-            res = self.handle_key(key)
-            if res is not None:
-                return res
+            buf = os.read(0, 32)
+            sz = len(buf)
+            i = 0
+            while i < sz:
+                if buf[0] == 0x1b:
+                    key = buf
+                    i = len(buf)
+                else:
+                    key = buf[i:i + 1]
+                    i += 1
+                self.show_status(repr(key))
+                if key in KEYMAP:
+                    key = KEYMAP[key]
+                if key == KEY_QUIT:
+                    return key
+                if self.handle_cursor_keys(key):
+                    continue
+                res = self.handle_key(key)
+                if res is not None:
+                    return res
 
     def handle_key(self, key):
             l = self.content[self.cur_line]
