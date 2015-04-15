@@ -37,6 +37,7 @@ class LineEditor(Editor):
     def edit(self, line):
         self.set_lines([line])
         self.col = len(line)
+        self.adjust_cursor_eol()
         self.just_started = True
         key = self.loop()
         if key == KEY_ENTER:
