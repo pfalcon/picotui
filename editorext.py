@@ -54,6 +54,8 @@ class Viewer(Editor):
 
 class EditorExt(Editor):
 
+    screen_width = 80
+
     def get_cur_line(self):
         return self.content[self.cur_line]
 
@@ -120,7 +122,9 @@ class EditorExt(Editor):
             self.goto(top, left + pos)
             self.wr(title)
 
-    def dialog_edit_line(self, left=10, top=8, width=40, height=3, line="", title=""):
+    def dialog_edit_line(self, left=None, top=8, width=40, height=3, line="", title=""):
+        if left is None:
+            left = (self.screen_width - width) / 2
         self.dialog_box(left, top, width, height, title)
         e = LineEditor(left + 1, top + 1, width - 2, height - 2)
         return e.edit(line)
