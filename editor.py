@@ -49,6 +49,7 @@ class Editor:
         self.top = top
         self.height = height
         self.width = width
+        self.margin = 0
 
     def enable_mouse(self):
         # Mouse reporting - X10 compatbility mode
@@ -101,12 +102,21 @@ class Editor:
     def show_cursor_status(self):
         self.cursor(False)
         self.goto(31, 0)
-        self.wr("% 3d:% 3d" % (self.cur_line, self.col))
+        self.wr("% 3d:% 3d" % (self.cur_line, self.col + self.margin))
         self.set_cursor()
         self.cursor(True)
 
     def adjust_cursor_eol(self):
-        self.col = min(self.col, self.width - 1, len(self.content[self.cur_line]))
+        # Returns True if entire window needs redraw
+        val = self.col + self.margin
+        val = min(val, len(self.content[self.cur_line]))
+        if val > self.width - 1:
+            self.margin = val - (self.width - 1)
+            self.col = self.width - 1
+            return True
+        else:
+            self.col = val - self.margin
+            return False
 
     def set_lines(self, lines):
         self.content = lines
@@ -136,6 +146,7 @@ class Editor:
         self.cursor(True)
 
     def show_line(self, l):
+        l = l[self.margin:]
         l = l[:self.width]
         self.wr(l)
         self.clear_num_pos(self.width - len(l))
@@ -154,16 +165,16 @@ class Editor:
         if key == KEY_DOWN:
             if self.cur_line + 1 != self.total_lines:
                 self.cur_line += 1
-                self.adjust_cursor_eol()
+                redraw = self.adjust_cursor_eol()
                 self.show_cursor_status()
-                if self.next_line():
+                if self.next_line() or redraw:
                     self.update_screen()
                 else:
                     self.set_cursor()
         elif key == KEY_UP:
             if self.cur_line > 0:
                 self.cur_line -= 1
-                self.adjust_cursor_eol()
+                redraw = self.adjust_cursor_eol()
                 self.show_cursor_status()
                 if self.row == 0:
                     if self.top_line > 0:
@@ -171,22 +182,36 @@ class Editor:
                         self.update_screen()
                 else:
                     self.row -= 1
-                    self.set_cursor()
+                    if redraw:
+                        self.update_screen()
+                    else:
+                        self.set_cursor()
         elif key == KEY_LEFT:
             if self.col > 0:
                 self.col -= 1
                 self.set_cursor()
+            elif self.margin > 0:
+                self.margin -= 1
+                self.update_screen()
         elif key == KEY_RIGHT:
             self.col += 1
-            self.adjust_cursor_eol()
-            self.set_cursor()
+            if self.adjust_cursor_eol():
+                self.update_screen()
+            else:
+                self.set_cursor()
         elif key == KEY_HOME:
             self.col = 0
-            self.set_cursor()
+            if self.margin > 0:
+                self.margin = 0
+                self.update_screen()
+            else:
+                self.set_cursor()
         elif key == KEY_END:
             self.col = len(self.content[self.cur_line])
-            self.adjust_cursor_eol()
-            self.set_cursor()
+            if self.adjust_cursor_eol():
+                self.update_screen()
+            else:
+                self.set_cursor()
         elif key == KEY_PGUP:
             self.cur_line -= self.height
             self.top_line -= self.height
@@ -247,25 +272,29 @@ class Editor:
     def handle_key(self, key):
             l = self.content[self.cur_line]
             if key == KEY_ENTER:
-                self.content[self.cur_line] = l[:self.col]
+                self.content[self.cur_line] = l[:self.col + self.margin]
                 self.cur_line += 1
-                self.content[self.cur_line:self.cur_line] = [l[self.col:]]
+                self.content[self.cur_line:self.cur_line] = [l[self.col + self.margin:]]
                 self.total_lines += 1
                 self.col = 0
+                self.margin = 0
                 self.next_line()
                 self.update_screen()
             elif key == KEY_BACKSPACE:
-                if self.col:
-                    self.col -= 1
-                    l = l[:self.col] + l[self.col + 1:]
+                if self.col + self.margin:
+                    if self.col:
+                        self.col -= 1
+                    else:
+                        self.margin -= 1
+                    l = l[:self.col + self.margin] + l[self.col + self.margin + 1:]
                     self.content[self.cur_line] = l
                     self.update_line()
             elif key == KEY_DELETE:
-                l = l[:self.col] + l[self.col + 1:]
+                l = l[:self.col + self.margin] + l[self.col + self.margin + 1:]
                 self.content[self.cur_line] = l
                 self.update_line()
             else:
-                l = l[:self.col] + str(key, "utf-8") + l[self.col:]
+                l = l[:self.col + self.margin] + str(key, "utf-8") + l[self.col + self.margin:]
                 self.content[self.cur_line] = l
                 self.col += 1
                 self.adjust_cursor_eol()
