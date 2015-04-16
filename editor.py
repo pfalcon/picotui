@@ -230,7 +230,11 @@ class Editor:
             if self.cur_line >= self.total_lines:
                 self.top_line = self.total_lines - self.height
                 self.cur_line = self.total_lines - 1
-                self.row = self.height - 1
+                if self.top_line >= 0:
+                    self.row = self.height - 1
+                else:
+                    self.top_line = 0
+                    self.row = self.cur_line
             self.adjust_cursor_eol()
             self.update_screen()
         elif isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
