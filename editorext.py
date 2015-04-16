@@ -59,7 +59,20 @@ class EditorExt(Editor):
     def get_cur_line(self):
         return self.content[self.cur_line]
 
+    def line_visible(self, no):
+        return self.top_line <= no < self.top_line + self.height
+
+    # If line "no" is already on screen, just reposition cursor to it and
+    # return False. Otherwise, show needed line either at the center of
+    # screen or at the top, and return True.
     def goto_line(self, no, center=True):
+        self.cur_line = no
+
+        if self.line_visible(no):
+            self.row = no - self.top_line
+            self.set_cursor()
+            return False
+
         if center:
             c = self.height // 2
             if no > c:
@@ -71,8 +84,8 @@ class EditorExt(Editor):
         else:
             self.top_line = no
             self.row = 0
-        self.cur_line = no
         self.update_screen()
+        return True
 
     def draw_box(self, left, top, width, height):
         # Use http://www.utf8-chartable.de/unicode-utf8-table.pl
