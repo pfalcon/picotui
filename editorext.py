@@ -95,6 +95,13 @@ class EditorExt(Editor):
         self.set_cursor()
         self.cursor(True)
 
+    def show_cursor_status(self):
+        self.cursor(False)
+        self.goto(31, 0)
+        self.wr("% 3d:% 3d" % (self.cur_line, self.col + self.margin))
+        self.set_cursor()
+        self.cursor(True)
+
     def draw_box(self, left, top, width, height):
         # Use http://www.utf8-chartable.de/unicode-utf8-table.pl
         # for utf-8 pseudographic reference

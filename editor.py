@@ -91,13 +91,6 @@ class Editor:
     def set_cursor(self):
         self.goto(self.row + self.top, self.col + self.left)
 
-    def show_cursor_status(self):
-        self.cursor(False)
-        self.goto(31, 0)
-        self.wr("% 3d:% 3d" % (self.cur_line, self.col + self.margin))
-        self.set_cursor()
-        self.cursor(True)
-
     def adjust_cursor_eol(self):
         # Returns True if entire window needs redraw
         val = self.col + self.margin
