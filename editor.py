@@ -91,14 +91,6 @@ class Editor:
     def set_cursor(self):
         self.goto(self.row + self.top, self.col + self.left)
 
-    def show_status(self, msg):
-        self.cursor(False)
-        self.goto(30, 0)
-        self.wr(msg)
-        self.clear_to_eol()
-        self.set_cursor()
-        self.cursor(True)
-
     def show_cursor_status(self):
         self.cursor(False)
         self.goto(31, 0)
@@ -262,7 +254,7 @@ class Editor:
                 else:
                     key = buf[i:i + 1]
                     i += 1
-                self.show_status(repr(key))
+                #self.show_status(repr(key))
                 if key in KEYMAP:
                     key = KEYMAP[key]
                 if key == KEY_QUIT:

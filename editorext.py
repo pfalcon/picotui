@@ -87,6 +87,14 @@ class EditorExt(Editor):
         self.update_screen()
         return True
 
+    def show_status(self, msg):
+        self.cursor(False)
+        self.goto(30, 0)
+        self.wr(msg)
+        self.clear_to_eol()
+        self.set_cursor()
+        self.cursor(True)
+
     def draw_box(self, left, top, width, height):
         # Use http://www.utf8-chartable.de/unicode-utf8-table.pl
         # for utf-8 pseudographic reference
