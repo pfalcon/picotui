@@ -126,7 +126,6 @@ class Editor:
                 self.show_line(self.content[i])
                 i += 1
             r += 1
-        self.show_cursor_status()
         self.set_cursor()
         self.cursor(True)
 
@@ -158,7 +157,6 @@ class Editor:
             if self.cur_line + 1 != self.total_lines:
                 self.cur_line += 1
                 redraw = self.adjust_cursor_eol()
-                self.show_cursor_status()
                 if self.next_line() or redraw:
                     self.update_screen()
                 else:
@@ -167,7 +165,6 @@ class Editor:
             if self.cur_line > 0:
                 self.cur_line -= 1
                 redraw = self.adjust_cursor_eol()
-                self.show_cursor_status()
                 if self.row == 0:
                     if self.top_line > 0:
                         self.top_line -= 1
