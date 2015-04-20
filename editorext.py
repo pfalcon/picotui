@@ -56,6 +56,11 @@ class EditorExt(Editor):
 
     screen_width = 80
 
+    def __init__(self, left=0, top=0, width=80, height=24):
+        super().__init__(left, top, width, height)
+        # +1 assumes there's a border around editor pane
+        self.status_y = top + height + 1
+
     def get_cur_line(self):
         return self.content[self.cur_line]
 
@@ -89,7 +94,7 @@ class EditorExt(Editor):
 
     def show_status(self, msg):
         self.cursor(False)
-        self.goto(30, 0)
+        self.goto(self.status_y, 0)
         self.wr(msg)
         self.clear_to_eol()
         self.set_cursor()
