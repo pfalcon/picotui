@@ -40,7 +40,7 @@ b"\x1b[3~": KEY_DELETE,
 
 class Editor:
 
-    def __init__(self, left=0, top=0, width=80, height=25):
+    def __init__(self, left=0, top=0, width=80, height=24):
         self.top_line = 0
         self.cur_line = 0
         self.row = 0
