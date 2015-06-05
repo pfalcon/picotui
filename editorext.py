@@ -162,6 +162,18 @@ class EditorExt(Editor):
         e = LineEditor(left + 1, top + 1, width - 2, height - 2)
         return e.edit(line)
 
+    @classmethod
+    def screen_size(self):
+        import select
+        self.wr(b"\x1b[18t")
+        res = select.select([0], [], [], 0.2)[0]
+        if not res:
+            return (80, 24)
+        resp = os.read(0, 32)
+        assert resp.startswith(b"\x1b[8;") and resp[-1:] == b"t"
+        vals = resp[:-1].split(b";")
+        return (int(vals[2]), int(vals[1]))
+
 
 if __name__ == "__main__":
 
