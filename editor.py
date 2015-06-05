@@ -286,9 +286,10 @@ class Editor:
                 self.adjust_cursor_eol()
                 self.update_line()
 
-    def init_tty(self):
+    @classmethod
+    def init_tty(cls):
         import tty, termios
-        self.org_termios = termios.tcgetattr(0)
+        cls.org_termios = termios.tcgetattr(0)
         tty.setraw(0)
 
     def deinit_tty(self):
