@@ -221,9 +221,12 @@ class Editor:
             self.update_screen()
         elif isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
             row = key[5] - 33
-            if row < self.height:
+            col = key[4] - 33
+            row -= self.top
+            col -= self.left
+            if 0 <= row < self.height and 0 <= col < self.width:
                 self.row = row
-                self.col = key[4] - 33
+                self.col = col
                 self.cur_line = self.top_line + self.row
                 self.adjust_cursor_eol()
                 self.set_cursor()
