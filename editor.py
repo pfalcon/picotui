@@ -52,7 +52,7 @@ class Editor:
         self.margin = 0
 
     def enable_mouse(self):
-        # Mouse reporting - X10 compatbility mode
+        # Mouse reporting - X10 compatibility mode
         os.write(1, b"\x1b[?9h")
 
     @staticmethod
