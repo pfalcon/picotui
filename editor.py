@@ -116,7 +116,7 @@ class Editor:
             if i == self.total_lines:
                 self.clear_num_pos(self.width)
             else:
-                self.show_line(self.content[i])
+                self.show_line(self.content[i], i)
                 i += 1
             r += 1
         self.set_cursor()
@@ -125,11 +125,11 @@ class Editor:
     def update_line(self):
         self.cursor(False)
         self.goto(self.row + self.top, self.left)
-        self.show_line(self.content[self.cur_line])
+        self.show_line(self.content[self.cur_line], self.cur_line)
         self.set_cursor()
         self.cursor(True)
 
-    def show_line(self, l):
+    def show_line(self, l, i):
         l = l[self.margin:]
         l = l[:self.width]
         self.wr(l)
