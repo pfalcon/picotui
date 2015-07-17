@@ -140,7 +140,7 @@ class EditorExt(Editor):
         # doesn't work
         #self.wr("\x1b[%s;%s;%s;%s$z" % (top + 1, left + 1, top + height, left + width))
         s = b" " * width
-        bottom = top + height - 1
+        bottom = top + height
         while top < bottom:
             self.goto(top, left)
             self.wr(s)
