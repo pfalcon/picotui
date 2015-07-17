@@ -122,6 +122,8 @@ class Editor:
         self.set_cursor()
         self.cursor(True)
 
+    redraw = update_screen
+
     def update_line(self):
         self.cursor(False)
         self.goto(self.row + self.top, self.left)
