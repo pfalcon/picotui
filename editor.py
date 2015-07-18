@@ -50,6 +50,7 @@ class Editor:
         self.height = height
         self.width = width
         self.margin = 0
+        self.kbuf = b""
 
     def enable_mouse(self):
         # Mouse reporting - X10 compatibility mode
@@ -221,46 +222,54 @@ class Editor:
                     self.row = self.cur_line
             self.adjust_cursor_eol()
             self.update_screen()
-        elif isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
-            row = key[5] - 33
-            col = key[4] - 33
-            row -= self.top
-            col -= self.left
-            if 0 <= row < self.height and 0 <= col < self.width:
-                self.row = row
-                self.col = col
-                self.cur_line = self.top_line + self.row
-                self.adjust_cursor_eol()
-                self.set_cursor()
         else:
             return False
         return True
 
+    def handle_mouse(self, col, row):
+        row -= self.top
+        col -= self.left
+        if 0 <= row < self.height and 0 <= col < self.width:
+            self.row = row
+            self.col = col
+            self.cur_line = self.top_line + self.row
+            self.adjust_cursor_eol()
+            self.set_cursor()
+
+    def get_input(self):
+        if self.kbuf:
+            key = self.kbuf[0:1]
+            self.kbuf = self.kbuf[1:]
+        else:
+            key = os.read(0, 32)
+            if key[0] != 0x1b:
+                self.kbuf = key[1:]
+                key = key[0:1]
+        key = KEYMAP.get(key, key)
+        return key
+
     def loop(self):
-        self.update_screen()
+        self.redraw()
         while True:
-            buf = os.read(0, 32)
-            sz = len(buf)
-            i = 0
-            while i < sz:
-                if buf[0] == 0x1b:
-                    key = buf
-                    i = len(buf)
-                else:
-                    key = buf[i:i + 1]
-                    i += 1
-                #self.show_status(repr(key))
-                if key in KEYMAP:
-                    key = KEYMAP[key]
-                if key == KEY_QUIT:
-                    return key
-                if self.handle_cursor_keys(key):
-                    continue
+            key = self.get_input()
+            if isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
+                row = key[5] - 33
+                col = key[4] - 33
+                res = self.handle_mouse(col, row)
+            else:
                 res = self.handle_key(key)
-                if res is not None:
-                    return res
+
+            if res is not None:
+                return res
 
     def handle_key(self, key):
+        if key == KEY_QUIT:
+            return key
+        if self.handle_cursor_keys(key):
+            return
+        return self.handle_edit_key(key)
+
+    def handle_edit_key(self, key):
             l = self.content[self.cur_line]
             if key == KEY_ENTER:
                 self.content[self.cur_line] = l[:self.col + self.margin]
