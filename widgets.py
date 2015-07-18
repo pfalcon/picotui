@@ -42,12 +42,36 @@ class Dialog(Widget):
         super().cursor(False)
         return super().loop()
 
+    def change_focus(self, widget):
+        if widget is self.focus_w:
+            return
+        if self.focus_w:
+            self.focus_w.focus = False
+            self.focus_w.redraw()
+        self.focus_w = widget
+        widget.focus = True
+        widget.redraw()
+
+    def move_focus(self, direction):
+        prev_idx = (self.focus_idx + direction) % len(self.childs)
+        self.focus_idx, new_w = self.find_focusable_by_idx(prev_idx, direction)
+        self.change_focus(new_w)
+
     def handle_key(self, key):
-        print(key)
         if key == KEY_QUIT:
             return key
-        if self.focus_w:
-            return self.focus_w.handle_key(key)
+        if key == KEY_TAB:
+            self.move_focus(1)
+        elif key == KEY_SHIFT_TAB:
+            self.move_focus(-1)
+        elif self.focus_w:
+            res = self.focus_w.handle_key(key)
+            if res == ACTION_PREV:
+                self.move_focus(-1)
+            elif res == ACTION_NEXT:
+                self.move_focus(1)
+            else:
+                return res
 
     def handle_mouse(self, x, y):
         # Work in absolute coordinates
@@ -55,12 +79,7 @@ class Dialog(Widget):
             w = self.find_focusable_by_xy(x, y)
 #            print(w)
             if w:
-                if self.focus_w:
-                    self.focus_w.focus = False
-                    self.focus_w.redraw()
-                self.focus_w = w
-                w.focus = True
-                w.redraw()
+                self.change_focus(w)
                 return w.handle_mouse(x, y)
 
 
