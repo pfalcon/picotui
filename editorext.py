@@ -107,54 +107,6 @@ class EditorExt(Editor):
         self.set_cursor()
         self.cursor(True)
 
-    def draw_box(self, left, top, width, height):
-        # Use http://www.utf8-chartable.de/unicode-utf8-table.pl
-        # for utf-8 pseudographic reference
-        bottom = top + height - 1
-        self.goto(top, left)
-        # "┌"
-        self.wr(b"\xe2\x94\x8c")
-        # "─"
-        hor = b"\xe2\x94\x80" * (width - 2)
-        self.wr(hor)
-        # "┐"
-        self.wr(b"\xe2\x94\x90")
-
-        self.goto(bottom, left)
-        # "└"
-        self.wr(b"\xe2\x94\x94")
-        self.wr(hor)
-        # "┘"
-        self.wr(b"\xe2\x94\x98")
-
-        top += 1
-        while top < bottom:
-            # "│"
-            self.goto(top, left)
-            self.wr(b"\xe2\x94\x82")
-            self.goto(top, left + width - 1)
-            self.wr(b"\xe2\x94\x82")
-            top += 1
-
-    def clear_box(self, left, top, width, height):
-        # doesn't work
-        #self.wr("\x1b[%s;%s;%s;%s$z" % (top + 1, left + 1, top + height, left + width))
-        s = b" " * width
-        bottom = top + height
-        while top < bottom:
-            self.goto(top, left)
-            self.wr(s)
-            top += 1
-
-    def dialog_box(self, left, top, width, height, title=""):
-        self.clear_box(left + 1, top + 1, width - 2, height - 2)
-        self.draw_box(left, top, width, height)
-        if title:
-            #pos = (width - len(title)) / 2
-            pos = 1
-            self.goto(top, left + pos)
-            self.wr(title)
-
     def dialog_edit_line(self, left=None, top=8, width=40, height=3, line="", title=""):
         if left is None:
             left = (self.screen_width - width) / 2
