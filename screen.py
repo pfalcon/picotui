@@ -31,6 +31,8 @@ KEY_QUIT = 9
 KEY_ENTER = 10
 KEY_BACKSPACE = 11
 KEY_DELETE = 12
+KEY_TAB = b"\t"
+KEY_SHIFT_TAB = b"\x1b[Z"
 
 KEYMAP = {
 b"\x1b[A": KEY_UP,
