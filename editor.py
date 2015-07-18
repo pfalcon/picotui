@@ -6,6 +6,8 @@
 import sys
 import os
 
+import screen
+
 
 KEY_UP = 1
 KEY_DOWN = 2
@@ -38,7 +40,7 @@ b"\x1b[3~": KEY_DELETE,
 }
 
 
-class Editor:
+class Editor(screen.Screen):
 
     def __init__(self, left=0, top=0, width=80, height=24):
         self.top_line = 0
@@ -51,43 +53,6 @@ class Editor:
         self.width = width
         self.margin = 0
         self.kbuf = b""
-
-    def enable_mouse(self):
-        # Mouse reporting - X10 compatibility mode
-        os.write(1, b"\x1b[?9h")
-
-    @staticmethod
-    def wr(s):
-        # TODO: When Python is 3.5, update this to use only bytes
-        if isinstance(s, str):
-            s = bytes(s, "utf-8")
-        os.write(1, s)
-
-    @staticmethod
-    def cls():
-        Editor.wr(b"\x1b[2J")
-
-    @staticmethod
-    def goto(row, col):
-        # TODO: When Python is 3.5, update this to use bytes
-        Editor.wr("\x1b[%d;%dH" % (row + 1, col + 1))
-
-    @staticmethod
-    def clear_to_eol():
-        Editor.wr(b"\x1b[0K")
-
-    # Clear specified number of positions
-    @staticmethod
-    def clear_num_pos(num):
-        if num > 0:
-            Editor.wr("\x1b[%dX" % num)
-
-    @staticmethod
-    def cursor(onoff):
-        if onoff:
-            Editor.wr(b"\x1b[?25h")
-        else:
-            Editor.wr(b"\x1b[?25l")
 
     def set_cursor(self):
         self.goto(self.row + self.top, self.col + self.left)
@@ -300,17 +265,10 @@ class Editor:
                 self.adjust_cursor_eol()
                 self.update_line()
 
-    @classmethod
-    def init_tty(cls):
-        import tty, termios
-        cls.org_termios = termios.tcgetattr(0)
-        tty.setraw(0)
-
     def deinit_tty(self):
         # Don't leave cursor in the middle of screen
         self.goto(self.height, 0)
-        import termios
-        termios.tcsetattr(0, termios.TCSANOW, self.org_termios)
+        super().deinit_tty()
 
 
 if __name__ == "__main__":
