@@ -7,11 +7,13 @@ import sys
 import os
 
 from screen import *
+from basewidget import Widget
 
 
-class Editor(Screen):
+class Editor(Widget):
 
     def __init__(self, left=0, top=0, width=80, height=24):
+        super().__init__()
         self.top_line = 0
         self.cur_line = 0
         self.row = 0
@@ -21,7 +23,6 @@ class Editor(Screen):
         self.height = height
         self.width = width
         self.margin = 0
-        self.kbuf = b""
 
     def set_cursor(self):
         self.goto(self.row + self.top, self.col + self.left)
@@ -167,32 +168,6 @@ class Editor(Screen):
             self.cur_line = self.top_line + self.row
             self.adjust_cursor_eol()
             self.set_cursor()
-
-    def get_input(self):
-        if self.kbuf:
-            key = self.kbuf[0:1]
-            self.kbuf = self.kbuf[1:]
-        else:
-            key = os.read(0, 32)
-            if key[0] != 0x1b:
-                self.kbuf = key[1:]
-                key = key[0:1]
-        key = KEYMAP.get(key, key)
-        return key
-
-    def loop(self):
-        self.redraw()
-        while True:
-            key = self.get_input()
-            if isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
-                row = key[5] - 33
-                col = key[4] - 33
-                res = self.handle_mouse(col, row)
-            else:
-                res = self.handle_key(key)
-
-            if res is not None:
-                return res
 
     def handle_key(self, key):
         if key == KEY_QUIT:
