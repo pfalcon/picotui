@@ -99,10 +99,10 @@ class WButton(Widget):
 
     focusable = True
 
-    def __init__(self, text):
+    def __init__(self, w, text):
         self.t = text
         self.h = 1
-        self.w = len(text) + 2
+        self.w = w or len(text) + 2
         self.disabled = False
         self.focus = False
         self.finish_dialog = False
@@ -116,7 +116,7 @@ class WButton(Widget):
                 self.attr_color(COLOR_BRIGHT_WHITE, COLOR_GREEN)
             else:
                 self.attr_color(COLOR_BLACK, COLOR_GREEN)
-        self.wr(" " + self.t + " ")
+        self.wr(self.t.center(self.w))
         self.attr_reset()
 
     def handle_mouse(self, x, y):
