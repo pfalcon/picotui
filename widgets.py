@@ -27,7 +27,7 @@ class Dialog(Widget):
         while 0 <= from_idx < sz:
             if self.childs[from_idx].focusable:
                 return from_idx, self.childs[from_idx]
-            from_idx += direction
+            from_idx = (from_idx + direction) % sz
         return None, None
 
     def find_focusable_by_xy(self, x, y):
