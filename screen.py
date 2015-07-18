@@ -47,6 +47,15 @@ class Screen:
         os.write(1, s)
 
     @staticmethod
+    def wr_fixedw(s, width):
+        # Write string in a fixed-width field
+        s = s[:width]
+        Screen.wr(s)
+        Screen.wr(" " * (width - len(s)))
+        # Doesn't work here, as it doesn't advance cursor
+        #Screen.clear_num_pos(width - len(s))
+
+    @staticmethod
     def cls():
         Screen.wr(b"\x1b[2J")
 
@@ -64,6 +73,18 @@ class Screen:
     def clear_num_pos(num):
         if num > 0:
             Screen.wr("\x1b[%dX" % num)
+
+    @staticmethod
+    def attr_color(fg, bg):
+        assert bg <= 8
+        if (fg > 8):
+            Screen.wr(b"\x1b[%d;%d;1m" % (fg + 30 - 8, bg + 40))
+        else:
+            Screen.wr(b"\x1b[%d;%dm" % (fg + 30, bg + 40))
+
+    @staticmethod
+    def attr_reset():
+        Screen.wr(b"\x1b[0m")
 
     @staticmethod
     def cursor(onoff):
