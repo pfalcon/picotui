@@ -96,11 +96,17 @@ class Screen:
 
     @staticmethod
     def attr_color(fg, bg):
-        assert bg <= 8
-        if (fg > 8):
-            Screen.wr(b"\x1b[%d;%d;1m" % (fg + 30 - 8, bg + 40))
+        if bg is None:
+            if (fg > 8):
+                Screen.wr(b"\x1b[%d;1m" % (fg + 30 - 8))
+            else:
+                Screen.wr(b"\x1b[%dm" % (fg + 30))
         else:
-            Screen.wr(b"\x1b[%d;%dm" % (fg + 30, bg + 40))
+            assert bg <= 8
+            if (fg > 8):
+                Screen.wr(b"\x1b[%d;%d;1m" % (fg + 30 - 8, bg + 40))
+            else:
+                Screen.wr(b"\x1b[%d;%dm" % (fg + 30, bg + 40))
 
     @staticmethod
     def attr_reset():
