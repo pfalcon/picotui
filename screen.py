@@ -1,6 +1,37 @@
 import os
 
 
+KEY_UP = 1
+KEY_DOWN = 2
+KEY_LEFT = 3
+KEY_RIGHT = 4
+KEY_HOME = 5
+KEY_END = 6
+KEY_PGUP = 7
+KEY_PGDN = 8
+KEY_QUIT = 9
+KEY_ENTER = 10
+KEY_BACKSPACE = 11
+KEY_DELETE = 12
+
+KEYMAP = {
+b"\x1b[A": KEY_UP,
+b"\x1b[B": KEY_DOWN,
+b"\x1b[D": KEY_LEFT,
+b"\x1b[C": KEY_RIGHT,
+b"\x1bOH": KEY_HOME,
+b"\x1bOF": KEY_END,
+b"\x1b[1~": KEY_HOME,
+b"\x1b[4~": KEY_END,
+b"\x1b[5~": KEY_PGUP,
+b"\x1b[6~": KEY_PGDN,
+b"\x03": KEY_QUIT,
+b"\r": KEY_ENTER,
+b"\x7f": KEY_BACKSPACE,
+b"\x1b[3~": KEY_DELETE,
+}
+
+
 class Screen:
 
     @staticmethod
