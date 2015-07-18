@@ -73,7 +73,7 @@ class Editor(screen.Screen):
         self.content = lines
         self.total_lines = len(lines)
 
-    def update_screen(self):
+    def redraw(self):
         self.cursor(False)
         i = self.top_line
         r = self.top
@@ -87,8 +87,6 @@ class Editor(screen.Screen):
             r += 1
         self.set_cursor()
         self.cursor(True)
-
-    redraw = update_screen
 
     def update_line(self):
         self.cursor(False)
@@ -107,7 +105,7 @@ class Editor(screen.Screen):
         if self.row + 1 == self.height:
             self.top_line += 1
             return True
-            self.update_screen()
+            self.redraw()
         else:
             self.row += 1
             return False
@@ -119,7 +117,7 @@ class Editor(screen.Screen):
                 self.cur_line += 1
                 redraw = self.adjust_cursor_eol()
                 if self.next_line() or redraw:
-                    self.update_screen()
+                    self.redraw()
                 else:
                     self.set_cursor()
         elif key == KEY_UP:
@@ -129,11 +127,11 @@ class Editor(screen.Screen):
                 if self.row == 0:
                     if self.top_line > 0:
                         self.top_line -= 1
-                        self.update_screen()
+                        self.redraw()
                 else:
                     self.row -= 1
                     if redraw:
-                        self.update_screen()
+                        self.redraw()
                     else:
                         self.set_cursor()
         elif key == KEY_LEFT:
@@ -142,24 +140,24 @@ class Editor(screen.Screen):
                 self.set_cursor()
             elif self.margin > 0:
                 self.margin -= 1
-                self.update_screen()
+                self.redraw()
         elif key == KEY_RIGHT:
             self.col += 1
             if self.adjust_cursor_eol():
-                self.update_screen()
+                self.redraw()
             else:
                 self.set_cursor()
         elif key == KEY_HOME:
             self.col = 0
             if self.margin > 0:
                 self.margin = 0
-                self.update_screen()
+                self.redraw()
             else:
                 self.set_cursor()
         elif key == KEY_END:
             self.col = len(self.content[self.cur_line])
             if self.adjust_cursor_eol():
-                self.update_screen()
+                self.redraw()
             else:
                 self.set_cursor()
         elif key == KEY_PGUP:
@@ -173,7 +171,7 @@ class Editor(screen.Screen):
                 self.cur_line = 0
                 self.row = 0
             self.adjust_cursor_eol()
-            self.update_screen()
+            self.redraw()
         elif key == KEY_PGDN:
             self.cur_line += self.height
             self.top_line += self.height
@@ -186,7 +184,7 @@ class Editor(screen.Screen):
                     self.top_line = 0
                     self.row = self.cur_line
             self.adjust_cursor_eol()
-            self.update_screen()
+            self.redraw()
         else:
             return False
         return True
@@ -244,7 +242,7 @@ class Editor(screen.Screen):
                 self.col = 0
                 self.margin = 0
                 self.next_line()
-                self.update_screen()
+                self.redraw()
             elif key == KEY_BACKSPACE:
                 if self.col + self.margin:
                     if self.col:
