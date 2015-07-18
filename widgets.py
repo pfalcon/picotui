@@ -126,6 +126,12 @@ class WButton(Widget):
             else:
                 self.on_click()
 
+    def handle_key(self, key):
+        if key == KEY_UP:
+            return ACTION_PREV
+        if key == KEY_DOWN:
+            return ACTION_NEXT
+
     def on_click(self):
         pass
 
@@ -164,6 +170,15 @@ class WCheckbox(Widget):
         self.state = not self.state
         self.redraw()
 
+    def handle_key(self, key):
+        if key == KEY_UP:
+            return ACTION_PREV
+        if key == KEY_DOWN:
+            return ACTION_NEXT
+        if key == b" ":
+            self.state = not self.state
+            self.redraw()
+
 
 class WRadioButton(Widget):
 
@@ -186,6 +201,12 @@ class WRadioButton(Widget):
     def handle_mouse(self, x, y):
         self.choice = y - self.y
         self.redraw()
+
+    def handle_key(self, key):
+        if key == KEY_UP:
+            return ACTION_PREV
+        if key == KEY_DOWN:
+            return ACTION_NEXT
 
 
 class WListBox(EditorExt):
