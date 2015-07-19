@@ -420,6 +420,7 @@ class WComboBox(WTextEntry):
         if key == KEY_DOWN:
             choices = self.get_choices(self.get_text())
             popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
+            popup.main_widget = self
             res = popup.loop()
             if res == ACTION_OK:
                 val = popup.get_selected_value()
@@ -433,9 +434,33 @@ class WComboBox(WTextEntry):
             return super().handle_key(key)
 
 
+class WCompletionList(WPopupList):
+
+    def __init__(self, x, y, w, h, items):
+        Dialog.__init__(self, x, y, w, h)
+        self.list = self.OneShotList(w - 2, h - 2, items)
+        self.add(1, 1, self.list)
+        chk = WCheckbox("Prefix")
+        def is_prefix_changed(wid):
+            main = self.main_widget
+            choices = main.get_choices(main.get_text(), wid.state)
+            self.list.set_lines(choices)
+            self.list.cur_line = 0
+            self.list.redraw()
+        chk.on("changed", is_prefix_changed)
+        self.add(1, h - 1, chk)
+
+
 class WAutoComplete(WComboBox):
 
-    def get_choices(self, substr):
+    def __init__(self, w, text, items):
+        super().__init__(w, text, items)
+        self.popup_class = WCompletionList
+
+    def get_choices(self, substr, only_prefix=False):
         substr = substr.lower()
-        choices = list(filter(lambda x: substr in x.lower(), self.items))
+        if only_prefix:
+            choices = list(filter(lambda x: x.lower().startswith(substr), self.items))
+        else:
+            choices = list(filter(lambda x: substr in x.lower(), self.items))
         return choices
