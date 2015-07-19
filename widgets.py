@@ -176,6 +176,7 @@ class WCheckbox(Widget):
     focusable = True
 
     def __init__(self, title, state=False):
+        super().__init__()
         self.t = title
         self.h = 1
         self.w = 4 + len(title)
@@ -190,9 +191,13 @@ class WCheckbox(Widget):
         self.wr(self.t)
         self.attr_reset()
 
-    def handle_mouse(self, x, y):
+    def flip(self):
         self.state = not self.state
         self.redraw()
+        self.signal("changed")
+
+    def handle_mouse(self, x, y):
+        self.flip()
 
     def handle_key(self, key):
         if key == KEY_UP:
@@ -200,8 +205,7 @@ class WCheckbox(Widget):
         if key == KEY_DOWN:
             return ACTION_NEXT
         if key == b" ":
-            self.state = not self.state
-            self.redraw()
+            self.flip()
 
 
 class WRadioButton(Widget):
