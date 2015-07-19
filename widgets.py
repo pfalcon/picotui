@@ -173,11 +173,11 @@ class WCheckbox(Widget):
 
     focusable = True
 
-    def __init__(self, title):
+    def __init__(self, title, state=False):
         self.t = title
         self.h = 1
         self.w = 4 + len(title)
-        self.state = True
+        self.state = state
         self.focus = False
 
     def redraw(self):
