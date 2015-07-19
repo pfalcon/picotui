@@ -1,0 +1,6 @@
+# Unicode symbols in UTF-8
+
+# DOWNWARDS ARROW
+DOWN_ARROW = b"\xe2\x86\x93"
+# BLACK DOWN-POINTING TRIANGLE
+DOWN_TRIANGLE = b"\xe2\x96\xbc"
