@@ -314,6 +314,8 @@ class WPopupList(Dialog):
         return self.list.cur_line
 
     def get_selected_value(self):
+        if not self.list.content:
+            return None
         return self.list.content[self.list.cur_line]
 
 
