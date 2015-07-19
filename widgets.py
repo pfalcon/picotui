@@ -197,7 +197,7 @@ class WRadioButton(Widget):
         self.titles = titles
         self.choice = 0
         self.h = len(titles)
-        self.w = 4 + max((len(t) for t in titles))
+        self.w = 4 + self.longest(titles)
         self.focus = False
 
     def redraw(self):
