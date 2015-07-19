@@ -160,11 +160,15 @@ class WCheckbox(Widget):
         self.h = 1
         self.w = 4 + len(title)
         self.state = True
+        self.focus = False
 
     def redraw(self):
         self.goto(self.y, self.x)
+        if self.focus:
+            self.attr_color(COLOR_BRIGHT_BLUE, None)
         self.wr("[x] " if self.state else "[ ] ")
         self.wr(self.t)
+        self.attr_reset()
 
     def handle_mouse(self, x, y):
         self.state = not self.state
@@ -189,14 +193,18 @@ class WRadioButton(Widget):
         self.choice = 0
         self.h = len(titles)
         self.w = 4 + max((len(t) for t in titles))
+        self.focus = False
 
     def redraw(self):
         i = 0
+        if self.focus:
+            self.attr_color(COLOR_BRIGHT_BLUE, None)
         for t in self.titles:
             self.goto(self.y + i, self.x)
             self.wr("(*) " if self.choice == i else "( ) ")
             self.wr(t)
             i += 1
+        self.attr_reset()
 
     def handle_mouse(self, x, y):
         self.choice = y - self.y
@@ -222,6 +230,7 @@ class WListBox(EditorExt):
         self.height = h
         self.h = h
         self.set_lines(items)
+        self.focus = False
 
     def set_xy(self, x, y):
         self.x = x
@@ -232,7 +241,10 @@ class WListBox(EditorExt):
     def show_line(self, l, i):
         hlite = self.cur_line == i
         if hlite:
-            self.attr_color(COLOR_BRIGHT_WHITE, COLOR_GREEN)
+            if self.focus:
+                self.attr_color(COLOR_BRIGHT_WHITE, COLOR_GREEN)
+            else:
+                self.attr_color(COLOR_BLACK, COLOR_GREEN)
         l = l[:self.width]
         self.wr(l)
         self.clear_num_pos(self.width - len(l))
@@ -295,10 +307,14 @@ class WDropDown(Widget):
         self.choice = 0
         self.h = 1
         self.w = w
+        self.focus = False
 
     def redraw(self):
         self.goto(self.y, self.x)
-        self.attr_color(COLOR_BLACK, COLOR_CYAN)
+        if self.focus:
+            self.attr_color(COLOR_BRIGHT_WHITE, COLOR_CYAN)
+        else:
+            self.attr_color(COLOR_BLACK, COLOR_CYAN)
         self.wr_fixedw(self.items[self.choice], self.w - 2)
         self.wr(" v")
         self.attr_reset()
