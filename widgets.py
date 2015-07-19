@@ -48,9 +48,11 @@ class Dialog(Widget):
         return None, None
 
     def find_focusable_by_xy(self, x, y):
+        i = 0
         for w in self.childs:
             if w.focusable and w.inside(x, y):
-                return w
+                return i, w
+            i += 1
 
     def loop(self):
         self.autosize()
@@ -94,7 +96,7 @@ class Dialog(Widget):
     def handle_mouse(self, x, y):
         # Work in absolute coordinates
         if self.inside(x, y):
-            w = self.find_focusable_by_xy(x, y)
+            self.focus_idx, w = self.find_focusable_by_xy(x, y)
 #            print(w)
             if w:
                 self.change_focus(w)
