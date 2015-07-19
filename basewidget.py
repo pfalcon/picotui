@@ -15,6 +15,7 @@ class Widget(Screen):
 
     def __init__(self):
         self.kbuf = b""
+        self.signals = {}
 
     def set_xy(self, x, y):
         self.x = x
@@ -22,6 +23,13 @@ class Widget(Screen):
 
     def inside(self, x, y):
         return self.y <= y < self.y + self.h and self.x <= x < self.x + self.w
+
+    def signal(self, sig):
+        if sig in self.signals:
+            self.signals[sig](self)
+
+    def on(self, sig, handler):
+        self.signals[sig] = handler
 
     @staticmethod
     def longest(items):
