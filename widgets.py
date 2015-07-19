@@ -18,9 +18,14 @@ class Dialog(Widget):
         widget.owner = self
 
     def redraw(self):
+        # Redraw widgets with cursor off
+        self.cursor(False)
         self.dialog_box(self.x, self.y, self.w, self.h)
         for w in self.childs:
             w.redraw()
+        # Then give widget in focus a chance to enable cursor
+        if self.focus_w:
+            self.focus_w.set_cursor()
 
     def find_focusable_by_idx(self, from_idx, direction):
         sz = len(self.childs)
@@ -39,7 +44,6 @@ class Dialog(Widget):
         self.focus_idx, self.focus_w = self.find_focusable_by_idx(0, 1)
         if self.focus_w:
             self.focus_w.focus = True
-        super().cursor(False)
         return super().loop()
 
     def change_focus(self, widget):
@@ -51,6 +55,7 @@ class Dialog(Widget):
         self.focus_w = widget
         widget.focus = True
         widget.redraw()
+        widget.set_cursor()
 
     def move_focus(self, direction):
         prev_idx = (self.focus_idx + direction) % len(self.childs)
@@ -263,9 +268,8 @@ class WListBox(EditorExt):
     def handle_edit_key(self, key):
         pass
 
-    @staticmethod
-    def cursor(onoff):
-        pass
+    def set_cursor(self):
+        Widget.set_cursor(self)
 
 
 class WPopupList(Dialog):

@@ -23,6 +23,10 @@ class Widget(Screen):
     def inside(self, x, y):
         return self.y <= y < self.y + self.h and self.x <= x < self.x + self.w
 
+    def set_cursor(self):
+        # By default, a widget doesn't use text cursor, so disables it
+        self.cursor(False)
+
     def get_input(self):
         if self.kbuf:
             key = self.kbuf[0:1]
