@@ -329,3 +329,52 @@ class WDropDown(Widget):
         if res == ACTION_OK:
             self.choice = popup.get_choice()
         self.owner.redraw()
+
+
+class WTextEntry(Editor):
+
+    focusable = True
+
+    def __init__(self, w, text):
+        super().__init__(width=w, height=1)
+        self.t = text
+        self.h = 1
+        self.w = w
+        self.focus = False
+        self.set_lines([text])
+        self.col = len(text)
+        self.adjust_cursor_eol()
+        self.just_started = True
+
+    def set_xy(self, x, y):
+        super().set_xy(x, y)
+        self.left = x
+        self.top = y
+
+    def handle_cursor_keys(self, key):
+        if super().handle_cursor_keys(key):
+            if self.just_started:
+                self.just_started = False
+                self.redraw()
+            return True
+        return False
+
+    def handle_edit_key(self, key):
+        if key in (KEY_ENTER, KEY_ESC):
+            return key
+        if self.just_started:
+            # Overwrite initial string with new content
+            self.set_lines([""])
+            self.col = 0
+            self.just_started = False
+
+        return super().handle_edit_key(key)
+
+    def show_line(self, l, i):
+        if self.just_started:
+            fg = COLOR_WHITE
+        else:
+            fg = COLOR_BLACK
+        self.attr_color(fg, COLOR_CYAN)
+        super().show_line(l, i)
+        self.attr_reset()
