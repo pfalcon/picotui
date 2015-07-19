@@ -400,3 +400,11 @@ class WComboBox(WTextEntry):
             self.owner.redraw()
         else:
             return super().handle_edit_key(key)
+
+
+class WAutoComplete(WComboBox):
+
+    def get_choices(self, substr):
+        substr = substr.lower()
+        choices = list(filter(lambda x: substr in x.lower(), self.items))
+        return choices
