@@ -363,6 +363,9 @@ class WTextEntry(EditorExt):
         self.adjust_cursor_eol()
         self.just_started = True
 
+    def get_text(self):
+        return self.get_cur_line()
+
     def handle_cursor_keys(self, key):
         if super().handle_cursor_keys(key):
             if self.just_started:
