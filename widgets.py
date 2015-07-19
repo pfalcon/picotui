@@ -416,19 +416,21 @@ class WComboBox(WTextEntry):
     def get_choices(self, substr):
         return self.items
 
-    def handle_edit_key(self, key):
-        if key == KEY_ENTER:
-            choices = self.get_choices(self.get_cur_line())
+    def handle_key(self, key):
+        if key == KEY_DOWN:
+            choices = self.get_choices(self.get_text())
             popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
             res = popup.loop()
             if res == ACTION_OK:
-                self.set_lines([popup.get_selected_value()])
-                self.col = sys.maxsize
-                self.adjust_cursor_eol()
-                self.just_started = False
+                val = popup.get_selected_value()
+                if val is not None:
+                    self.set_lines([val])
+                    self.col = sys.maxsize
+                    self.adjust_cursor_eol()
+                    self.just_started = False
             self.owner.redraw()
         else:
-            return super().handle_edit_key(key)
+            return super().handle_key(key)
 
 
 class WAutoComplete(WComboBox):
