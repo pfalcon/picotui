@@ -5,7 +5,8 @@
 #
 import sys
 import os
-from .editor import *
+from screen import *
+from editor import *
 
 
 KEY_ESC = 20
