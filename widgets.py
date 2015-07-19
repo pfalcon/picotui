@@ -359,6 +359,12 @@ class WTextEntry(Editor):
 
         return super().handle_edit_key(key)
 
+    def handle_mouse(self, x, y):
+        if self.just_started:
+            self.just_started = False
+            self.redraw()
+        super().handle_mouse(x, y)
+
     def show_line(self, l, i):
         if self.just_started:
             fg = COLOR_WHITE
