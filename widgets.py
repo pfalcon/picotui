@@ -295,6 +295,9 @@ class WPopupList(Dialog):
     def get_choice(self):
         return self.list.cur_line
 
+    def get_selected_value(self):
+        return self.list.content[self.list.cur_line]
+
 
 class WDropDown(Widget):
 
@@ -325,7 +328,7 @@ class WDropDown(Widget):
         self.owner.redraw()
 
 
-class WTextEntry(Editor):
+class WTextEntry(EditorExt):
 
     focusable = True
 
@@ -373,3 +376,27 @@ class WTextEntry(Editor):
         self.attr_color(fg, COLOR_CYAN)
         super().show_line(l, i)
         self.attr_reset()
+
+
+class WComboBox(WTextEntry):
+
+    def __init__(self, w, text, items):
+        super().__init__(w, text)
+        self.items = items
+
+    def get_choices(self, substr):
+        return self.items
+
+    def handle_edit_key(self, key):
+        if key == KEY_ENTER:
+            choices = self.get_choices(self.get_cur_line())
+            popup = WPopupList(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
+            res = popup.loop()
+            if res == ACTION_OK:
+                self.set_lines([popup.get_selected_value()])
+                self.col = sys.maxsize
+                self.adjust_cursor_eol()
+                self.just_started = False
+            self.owner.redraw()
+        else:
+            return super().handle_edit_key(key)
