@@ -25,6 +25,8 @@ class Widget(Screen):
 
     @staticmethod
     def longest(items):
+        if not items:
+            return 0
         return max((len(t) for t in items))
 
     def set_cursor(self):
