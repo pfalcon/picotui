@@ -12,20 +12,20 @@ from basewidget import Widget
 
 class Editor(Widget):
 
-    def __init__(self, left=0, top=0, width=80, height=24):
+    def __init__(self, x=0, y=0, width=80, height=24):
         super().__init__()
         self.top_line = 0
         self.cur_line = 0
         self.row = 0
         self.col = 0
-        self.left = left
-        self.top = top
+        self.x = x
+        self.y = y
         self.height = height
         self.width = width
         self.margin = 0
 
     def set_cursor(self):
-        self.goto(self.row + self.top, self.col + self.left)
+        self.goto(self.row + self.y, self.col + self.x)
 
     def adjust_cursor_eol(self):
         # Returns True if entire window needs redraw
@@ -46,9 +46,9 @@ class Editor(Widget):
     def redraw(self):
         self.cursor(False)
         i = self.top_line
-        r = self.top
+        r = self.y
         for c in range(self.height):
-            self.goto(r, self.left)
+            self.goto(r, self.x)
             if i == self.total_lines:
                 self.clear_num_pos(self.width)
             else:
@@ -60,7 +60,7 @@ class Editor(Widget):
 
     def update_line(self):
         self.cursor(False)
-        self.goto(self.row + self.top, self.left)
+        self.goto(self.row + self.y, self.x)
         self.show_line(self.content[self.cur_line], self.cur_line)
         self.set_cursor()
         self.cursor(True)
@@ -160,8 +160,8 @@ class Editor(Widget):
         return True
 
     def handle_mouse(self, col, row):
-        row -= self.top
-        col -= self.left
+        row -= self.y
+        col -= self.x
         if 0 <= row < self.height and 0 <= col < self.width:
             self.row = row
             self.col = col

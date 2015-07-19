@@ -237,12 +237,6 @@ class WListBox(EditorExt):
         self.set_lines(items)
         self.focus = False
 
-    def set_xy(self, x, y):
-        self.x = x
-        self.y = y
-        self.left = x
-        self.top = y
-
     def show_line(self, l, i):
         hlite = self.cur_line == i
         if hlite:
@@ -345,11 +339,6 @@ class WTextEntry(Editor):
         self.col = len(text)
         self.adjust_cursor_eol()
         self.just_started = True
-
-    def set_xy(self, x, y):
-        super().set_xy(x, y)
-        self.left = x
-        self.top = y
 
     def handle_cursor_keys(self, key):
         if super().handle_cursor_keys(key):
