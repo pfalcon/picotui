@@ -411,6 +411,7 @@ class WComboBox(WTextEntry):
     def __init__(self, w, text, items):
         super().__init__(w, text)
         self.items = items
+        self.popup_class = WPopupList
 
     def get_choices(self, substr):
         return self.items
@@ -418,7 +419,7 @@ class WComboBox(WTextEntry):
     def handle_edit_key(self, key):
         if key == KEY_ENTER:
             choices = self.get_choices(self.get_cur_line())
-            popup = WPopupList(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
+            popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
             res = popup.loop()
             if res == ACTION_OK:
                 self.set_lines([popup.get_selected_value()])
