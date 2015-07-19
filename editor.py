@@ -29,8 +29,10 @@ class Editor(Widget):
 
     def adjust_cursor_eol(self):
         # Returns True if entire window needs redraw
-        val = self.col + self.margin
-        val = min(val, len(self.content[self.cur_line]))
+        val = 0
+        if self.content:
+            val = self.col + self.margin
+            val = min(val, len(self.content[self.cur_line]))
         if val > self.width - 1:
             self.margin = val - (self.width - 1)
             self.col = self.width - 1
