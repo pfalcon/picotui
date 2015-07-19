@@ -368,9 +368,10 @@ class WTextEntry(EditorExt):
         if key in (KEY_ENTER, KEY_ESC):
             return key
         if self.just_started:
-            # Overwrite initial string with new content
-            self.set_lines([""])
-            self.col = 0
+            if key != KEY_BACKSPACE:
+                # Overwrite initial string with new content
+                self.set_lines([""])
+                self.col = 0
             self.just_started = False
 
         return super().handle_edit_key(key)
