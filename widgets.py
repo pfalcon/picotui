@@ -11,11 +11,23 @@ class Dialog(Widget):
         self.w = w
         self.h = h
         self.childs = []
+        # On both sides
+        self.border_w = 2
+        self.border_h = 2
 
     def add(self, x, y, widget):
         widget.set_xy(self.x + x, self.y + y)
         self.childs.append(widget)
         widget.owner = self
+
+    def autosize(self):
+        w = 0
+        h = 0
+        for wid in self.childs:
+            w = max(w, wid.x - self.x + wid.w)
+            h = max(h, wid.y - self.y + wid.h)
+        self.w = max(self.w, w + self.border_w - 1)
+        self.h = max(self.h, h + self.border_h - 1)
 
     def redraw(self):
         # Redraw widgets with cursor off
@@ -41,6 +53,7 @@ class Dialog(Widget):
                 return w
 
     def loop(self):
+        self.autosize()
         self.focus_idx, self.focus_w = self.find_focusable_by_idx(0, 1)
         if self.focus_w:
             self.focus_w.focus = True
