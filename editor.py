@@ -165,11 +165,13 @@ class Editor(Widget):
         row -= self.y
         col -= self.x
         if 0 <= row < self.height and 0 <= col < self.width:
-            self.row = row
-            self.col = col
-            self.cur_line = self.top_line + self.row
-            self.adjust_cursor_eol()
-            self.set_cursor()
+            cur_line = self.top_line + row
+            if cur_line < self.total_lines:
+                self.row = row
+                self.col = col
+                self.cur_line = cur_line
+                self.adjust_cursor_eol()
+                self.set_cursor()
 
     def handle_key(self, key):
         if key == KEY_QUIT:
