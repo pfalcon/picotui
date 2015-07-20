@@ -54,6 +54,7 @@ class Dialog(Widget):
             if w.focusable and w.inside(x, y):
                 return i, w
             i += 1
+        return None, None
 
     def loop(self):
         self.autosize()
