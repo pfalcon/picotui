@@ -64,5 +64,5 @@ class Widget(Screen):
             else:
                 res = self.handle_key(key)
 
-            if res is not None:
+            if res is not None and res is not True:
                 return res
