@@ -271,8 +271,9 @@ class WListBox(EditorExt):
             self.attr_reset()
 
     def handle_mouse(self, x, y):
-        super().handle_mouse(x, y)
+        res = super().handle_mouse(x, y)
         self.redraw()
+        return res
 
     def handle_key(self, key):
         res = super().handle_key(key)
@@ -301,9 +302,9 @@ class WPopupList(Dialog):
             return super().handle_key(key)
 
         def handle_mouse(self, x, y):
-            super().handle_mouse(x, y)
-            # Mouse click finishes selection
-            return ACTION_OK
+            if super().handle_mouse(x, y) == True:
+                # (Processed) mouse click finishes selection
+                return ACTION_OK
 
     def __init__(self, x, y, w, h, items):
         super().__init__(x, y, w, h)
