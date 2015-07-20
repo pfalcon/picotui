@@ -1,5 +1,6 @@
 from basewidget import *
 from editorext import *
+import symbols
 
 
 class Dialog(Widget):
@@ -409,9 +410,17 @@ class WTextEntry(EditorExt):
 class WComboBox(WTextEntry):
 
     def __init__(self, w, text, items):
-        super().__init__(w, text)
+        # w - 1 width goes to Editor widget
+        super().__init__(w - 1, text)
+        # We have full requested width, will show arrow symbol as last char
+        self.w = w
         self.items = items
         self.popup_class = WPopupList
+
+    def redraw(self):
+        self.goto(self.y, self.x + self.w - 1)
+        self.wr(symbols.DOWN_ARROW)
+        super().redraw()
 
     def get_choices(self, substr):
         return self.items
