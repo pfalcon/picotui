@@ -172,6 +172,7 @@ class Editor(Widget):
                 self.cur_line = cur_line
                 self.adjust_cursor_eol()
                 self.set_cursor()
+                return True
 
     def handle_key(self, key):
         if key == KEY_QUIT:
