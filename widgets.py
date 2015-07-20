@@ -425,22 +425,31 @@ class WComboBox(WTextEntry):
     def get_choices(self, substr):
         return self.items
 
+    def show_popup(self):
+        choices = self.get_choices(self.get_text())
+        popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
+        popup.main_widget = self
+        res = popup.loop()
+        if res == ACTION_OK:
+            val = popup.get_selected_value()
+            if val is not None:
+                self.set_lines([val])
+                self.col = sys.maxsize
+                self.adjust_cursor_eol()
+                self.just_started = False
+        self.owner.redraw()
+
     def handle_key(self, key):
         if key == KEY_DOWN:
-            choices = self.get_choices(self.get_text())
-            popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
-            popup.main_widget = self
-            res = popup.loop()
-            if res == ACTION_OK:
-                val = popup.get_selected_value()
-                if val is not None:
-                    self.set_lines([val])
-                    self.col = sys.maxsize
-                    self.adjust_cursor_eol()
-                    self.just_started = False
-            self.owner.redraw()
+            self.show_popup()
         else:
             return super().handle_key(key)
+
+    def handle_mouse(self, x, y):
+        if x == self.x + self.w - 1:
+            self.show_popup()
+        else:
+            super().handle_mouse(x, y)
 
 
 class WCompletionList(WPopupList):
