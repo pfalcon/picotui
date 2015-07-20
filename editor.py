@@ -26,6 +26,7 @@ class Editor(Widget):
 
     def set_cursor(self):
         self.goto(self.row + self.y, self.col + self.x)
+        self.cursor(True)
 
     def adjust_cursor_eol(self):
         # Returns True if entire window needs redraw
@@ -58,14 +59,12 @@ class Editor(Widget):
                 i += 1
             r += 1
         self.set_cursor()
-        self.cursor(True)
 
     def update_line(self):
         self.cursor(False)
         self.goto(self.row + self.y, self.x)
         self.show_line(self.content[self.cur_line], self.cur_line)
         self.set_cursor()
-        self.cursor(True)
 
     def show_line(self, l, i):
         l = l[self.margin:]
