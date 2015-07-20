@@ -288,7 +288,8 @@ class WListBox(EditorExt):
         Widget.set_cursor(self)
 
     def cursor(self, state):
-        pass
+        # Force off
+        super().cursor(False)
 
 
 class WPopupList(Dialog):
