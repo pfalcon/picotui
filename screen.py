@@ -96,17 +96,18 @@ class Screen:
 
     @staticmethod
     def attr_color(fg, bg):
+        # TODO: Switch to b"%d" % foo when py3.5 is everywhere
         if bg is None:
             if (fg > 8):
-                Screen.wr(b"\x1b[%d;1m" % (fg + 30 - 8))
+                Screen.wr("\x1b[%d;1m" % (fg + 30 - 8))
             else:
-                Screen.wr(b"\x1b[%dm" % (fg + 30))
+                Screen.wr("\x1b[%dm" % (fg + 30))
         else:
             assert bg <= 8
             if (fg > 8):
-                Screen.wr(b"\x1b[%d;%d;1m" % (fg + 30 - 8, bg + 40))
+                Screen.wr("\x1b[%d;%d;1m" % (fg + 30 - 8, bg + 40))
             else:
-                Screen.wr(b"\x1b[%d;%dm" % (fg + 30, bg + 40))
+                Screen.wr("\x1b[%d;%dm" % (fg + 30, bg + 40))
 
     @staticmethod
     def attr_reset():
