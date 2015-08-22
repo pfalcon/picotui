@@ -1,6 +1,6 @@
 import os
 
-from screen import *
+from .screen import *
 
 
 # Standard widget result actions (as return from .loop())

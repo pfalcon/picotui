@@ -6,8 +6,8 @@
 import sys
 import os
 
-from screen import *
-from basewidget import Widget
+from .screen import *
+from .basewidget import Widget
 
 
 class Editor(Widget):

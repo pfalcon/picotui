@@ -1,6 +1,6 @@
-from basewidget import *
-from editorext import *
-import symbols
+from .basewidget import *
+from .editorext import *
+from . import symbols
 
 
 class Dialog(Widget):
