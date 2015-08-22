@@ -51,6 +51,8 @@ class Viewer(Editor):
     def handle_key(self, key):
         if key in (KEY_ENTER, KEY_ESC):
             return key
+        if super().handle_cursor_keys(key):
+            return True
 
 
 class EditorExt(Editor):
