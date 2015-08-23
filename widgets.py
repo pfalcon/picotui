@@ -466,7 +466,9 @@ class WCompletionList(WPopupList):
             main = self.main_widget
             choices = main.get_choices(main.get_text(), wid.state)
             self.list.set_lines(choices)
+            self.list.top_line = 0
             self.list.cur_line = 0
+            self.list.row = 0
             self.list.redraw()
         chk.on("changed", is_prefix_changed)
         self.add(1, h - 1, chk)
