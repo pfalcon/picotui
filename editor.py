@@ -83,6 +83,8 @@ class Editor(Widget):
             self.set_cursor()
 
     def handle_cursor_keys(self, key):
+        if not self.total_lines:
+            return
         if key == KEY_DOWN:
             if self.cur_line + 1 != self.total_lines:
                 self.cur_line += 1
