@@ -5,6 +5,8 @@ from . import symbols
 
 class Dialog(Widget):
 
+    finish_on_esc = True
+
     def __init__(self, x, y, w=0, h=0, title=""):
         super().__init__()
         self.x = x
@@ -85,6 +87,8 @@ class Dialog(Widget):
     def handle_key(self, key):
         if key == KEY_QUIT:
             return key
+        if key == KEY_ESC and self.finish_on_esc:
+            return ACTION_CANCEL
         if key == KEY_TAB:
             self.move_focus(1)
         elif key == KEY_SHIFT_TAB:
