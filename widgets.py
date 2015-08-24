@@ -5,12 +5,15 @@ from . import symbols
 
 class Dialog(Widget):
 
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w=0, h=0, title=""):
         super().__init__()
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.title = ""
+        if title:
+            self.title = " %s " % title
         self.childs = []
         # On both sides
         self.border_w = 2
@@ -33,7 +36,7 @@ class Dialog(Widget):
     def redraw(self):
         # Redraw widgets with cursor off
         self.cursor(False)
-        self.dialog_box(self.x, self.y, self.w, self.h)
+        self.dialog_box(self.x, self.y, self.w, self.h, self.title)
         for w in self.childs:
             w.redraw()
         # Then give widget in focus a chance to enable cursor
