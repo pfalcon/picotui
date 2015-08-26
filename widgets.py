@@ -94,6 +94,9 @@ class Dialog(Widget):
         elif key == KEY_SHIFT_TAB:
             self.move_focus(-1)
         elif self.focus_w:
+            if key == KEY_ENTER:
+                if self.focus_w.finish_dialog is not False:
+                    return self.focus_w.finish_dialog
             res = self.focus_w.handle_key(key)
             if res == ACTION_PREV:
                 self.move_focus(-1)
@@ -390,8 +393,9 @@ class WTextEntry(EditorExt):
         return False
 
     def handle_edit_key(self, key):
-        if key in (KEY_ENTER, KEY_ESC):
-            return key
+        if key == KEY_ENTER:
+            # Don't treat as editing key
+            return True
         if self.just_started:
             if key != KEY_BACKSPACE:
                 # Overwrite initial string with new content

@@ -12,6 +12,9 @@ ACTION_PREV = 1003
 class Widget(Screen):
 
     focusable = False
+    # If set to non-False, pressing Enter on this widget finishes
+    # dialog, with Dialog.loop() return value being this value.
+    finish_dialog = False
 
     def __init__(self):
         self.kbuf = b""
