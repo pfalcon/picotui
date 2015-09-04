@@ -429,6 +429,7 @@ class WTextEntry(EditorExt):
 class WComboBox(WTextEntry):
 
     popup_class = WPopupList
+    popup_h = 5
 
     def __init__(self, w, text, items):
         # w - 1 width goes to Editor widget
@@ -447,7 +448,7 @@ class WComboBox(WTextEntry):
 
     def show_popup(self):
         choices = self.get_choices(self.get_text())
-        popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, 5, choices)
+        popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, self.popup_h, choices)
         popup.main_widget = self
         res = popup.loop()
         if res == ACTION_OK:
