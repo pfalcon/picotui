@@ -268,6 +268,11 @@ class WListBox(EditorExt):
         self.set_lines(items)
         self.focus = False
 
+    def render_line(self, l):
+        # Default identity implementation is suitable for
+        # items being list of strings.
+        return l
+
     def show_line(self, l, i):
         hlite = self.cur_line == i
         if hlite:
@@ -275,7 +280,7 @@ class WListBox(EditorExt):
                 self.attr_color(COLOR_BRIGHT_WHITE, COLOR_GREEN)
             else:
                 self.attr_color(COLOR_BLACK, COLOR_GREEN)
-        l = l[:self.width]
+        l = self.render_line(l)[:self.width]
         self.wr(l)
         self.clear_num_pos(self.width - len(l))
         if hlite:
