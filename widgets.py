@@ -370,6 +370,9 @@ class WDropDown(Widget):
             self.choice = popup.get_choice()
         self.owner.redraw()
 
+    def handle_key(self, key):
+        self.handle_mouse(0, 0)
+
 
 class WTextEntry(EditorExt):
 
