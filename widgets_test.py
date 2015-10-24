@@ -1,6 +1,5 @@
 from .screen import *
 from .widgets import *
-from .menu import *
 
 
 if __name__ == "__main__":
