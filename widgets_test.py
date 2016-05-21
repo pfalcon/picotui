@@ -1,5 +1,5 @@
-from .screen import *
-from .widgets import *
+from picotui.screen import *
+from picotui.widgets import *
 
 
 if __name__ == "__main__":
