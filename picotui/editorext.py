@@ -92,7 +92,7 @@ class EditorExt(Editor):
         else:
             self.top_line = no
             self.row = 0
-        self.update_screen()
+        self.redraw()
         return True
 
     def show_status(self, msg):
