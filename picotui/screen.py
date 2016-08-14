@@ -33,6 +33,8 @@ KEY_BACKSPACE = 11
 KEY_DELETE = 12
 KEY_TAB = b"\t"
 KEY_SHIFT_TAB = b"\x1b[Z"
+KEY_ESC = 20
+KEY_F1 = 30
 
 KEYMAP = {
 b"\x1b[A": KEY_UP,
@@ -49,8 +51,9 @@ b"\x03": KEY_QUIT,
 b"\r": KEY_ENTER,
 b"\x7f": KEY_BACKSPACE,
 b"\x1b[3~": KEY_DELETE,
+b"\x1b": KEY_ESC,
+b"\x1bOP": KEY_F1,
 }
-
 
 class Screen:
 

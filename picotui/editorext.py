@@ -9,12 +9,6 @@ from .screen import *
 from .editor import *
 
 
-KEY_ESC = 20
-KEY_F1 = 30
-
-KEYMAP[b"\x1b"] = KEY_ESC
-KEYMAP[b'\x1bOP'] = KEY_F1
-
 # Edit single line, quit on Enter/Esc
 class LineEditor(Editor):
 
