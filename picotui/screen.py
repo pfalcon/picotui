@@ -35,6 +35,15 @@ KEY_TAB = b"\t"
 KEY_SHIFT_TAB = b"\x1b[Z"
 KEY_ESC = 20
 KEY_F1 = 30
+KEY_F2 = 31
+KEY_F3 = 32
+KEY_F4 = 33
+KEY_F5 = b'\x1b[15~'
+KEY_F6 = b'\x1b[17~'
+KEY_F7 = b'\x1b[18~'
+KEY_F8 = b'\x1b[19~'
+KEY_F9 = b'\x1b[20~'
+KEY_F10 = b'\x1b[21~'
 
 KEYMAP = {
 b"\x1b[A": KEY_UP,
@@ -53,6 +62,9 @@ b"\x7f": KEY_BACKSPACE,
 b"\x1b[3~": KEY_DELETE,
 b"\x1b": KEY_ESC,
 b"\x1bOP": KEY_F1,
+b"\x1bOQ": KEY_F2,
+b"\x1bOR": KEY_F3,
+b"\x1bOS": KEY_F4,
 }
 
 class Screen:
