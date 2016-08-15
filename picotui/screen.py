@@ -193,3 +193,15 @@ class Screen:
     def deinit_tty(cls):
         import termios
         termios.tcsetattr(0, termios.TCSANOW, cls.org_termios)
+
+    @classmethod
+    def screen_size(cls):
+        import select
+        cls.wr(b"\x1b[18t")
+        res = select.select([0], [], [], 0.2)[0]
+        if not res:
+            return (80, 24)
+        resp = os.read(0, 32)
+        assert resp.startswith(b"\x1b[8;") and resp[-1:] == b"t"
+        vals = resp[:-1].split(b";")
+        return (int(vals[2]), int(vals[1]))
