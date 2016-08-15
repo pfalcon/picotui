@@ -91,7 +91,7 @@ class EditorExt(Editor):
 
     def show_status(self, msg):
         self.cursor(False)
-        self.goto(self.status_y, 0)
+        self.goto(0, self.status_y)
         self.wr(msg)
         self.clear_to_eol()
         self.set_cursor()
@@ -99,7 +99,7 @@ class EditorExt(Editor):
 
     def show_cursor_status(self):
         self.cursor(False)
-        self.goto(31, 0)
+        self.goto(0, 31)
         self.wr("% 3d:% 3d" % (self.cur_line, self.col + self.margin))
         self.set_cursor()
         self.cursor(True)

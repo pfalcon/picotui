@@ -95,9 +95,9 @@ class Screen:
         Screen.wr(b"\x1b[2J")
 
     @staticmethod
-    def goto(row, col):
+    def goto(x, y):
         # TODO: When Python is 3.5, update this to use bytes
-        Screen.wr("\x1b[%d;%dH" % (row + 1, col + 1))
+        Screen.wr("\x1b[%d;%dH" % (y + 1, x + 1))
 
     @staticmethod
     def clear_to_eol():
@@ -139,7 +139,7 @@ class Screen:
         # Use http://www.utf8-chartable.de/unicode-utf8-table.pl
         # for utf-8 pseudographic reference
         bottom = top + height - 1
-        self.goto(top, left)
+        self.goto(left, top)
         # "┌"
         self.wr(b"\xe2\x94\x8c")
         # "─"
@@ -148,7 +148,7 @@ class Screen:
         # "┐"
         self.wr(b"\xe2\x94\x90")
 
-        self.goto(bottom, left)
+        self.goto(left, bottom)
         # "└"
         self.wr(b"\xe2\x94\x94")
         self.wr(hor)
@@ -158,9 +158,9 @@ class Screen:
         top += 1
         while top < bottom:
             # "│"
-            self.goto(top, left)
+            self.goto(left, top)
             self.wr(b"\xe2\x94\x82")
-            self.goto(top, left + width - 1)
+            self.goto(left + width - 1, top)
             self.wr(b"\xe2\x94\x82")
             top += 1
 
@@ -170,7 +170,7 @@ class Screen:
         s = b" " * width
         bottom = top + height
         while top < bottom:
-            self.goto(top, left)
+            self.goto(left, top)
             self.wr(s)
             top += 1
 
@@ -180,7 +180,7 @@ class Screen:
         if title:
             #pos = (width - len(title)) / 2
             pos = 1
-            self.goto(top, left + pos)
+            self.goto(left + pos, top)
             self.wr(title)
 
     @classmethod

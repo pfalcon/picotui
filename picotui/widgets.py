@@ -123,7 +123,7 @@ class WLabel(Widget):
         self.w = len(text)
 
     def redraw(self):
-        self.goto(self.y, self.x)
+        self.goto(self.x, self.y)
         self.wr(self.t)
 
 
@@ -140,7 +140,7 @@ class WButton(Widget):
         self.finish_dialog = False
 
     def redraw(self):
-        self.goto(self.y, self.x)
+        self.goto(self.x, self.y)
         if self.disabled:
             self.attr_color(COLOR_WHITE, COLOR_GRAY)
         else:
@@ -179,7 +179,7 @@ class WFrame(Widget):
         self.draw_box(self.x, self.y, self.w, self.h)
         if self.t:
             pos = 1
-            self.goto(self.y, self.x + pos)
+            self.goto(self.x + pos, self.y)
             self.wr(" %s " % self.t)
 
 
@@ -196,7 +196,7 @@ class WCheckbox(Widget):
         self.focus = False
 
     def redraw(self):
-        self.goto(self.y, self.x)
+        self.goto(self.x, self.y)
         if self.focus:
             self.attr_color(COLOR_BRIGHT_BLUE, None)
         self.wr("[x] " if self.state else "[ ] ")
@@ -236,7 +236,7 @@ class WRadioButton(Widget):
         if self.focus:
             self.attr_color(COLOR_BRIGHT_BLUE, None)
         for t in self.titles:
-            self.goto(self.y + i, self.x)
+            self.goto(self.x, self.y + i)
             self.wr("(*) " if self.choice == i else "( ) ")
             self.wr(t)
             i += 1
@@ -354,7 +354,7 @@ class WDropDown(Widget):
         self.focus = False
 
     def redraw(self):
-        self.goto(self.y, self.x)
+        self.goto(self.x, self.y)
         if self.focus:
             self.attr_color(COLOR_BRIGHT_WHITE, COLOR_CYAN)
         else:
@@ -442,7 +442,7 @@ class WComboBox(WTextEntry):
         self.items = items
 
     def redraw(self):
-        self.goto(self.y, self.x + self.w - 1)
+        self.goto(self.x + self.w - 1, self.y)
         self.wr(symbols.DOWN_ARROW)
         super().redraw()
 

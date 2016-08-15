@@ -25,7 +25,7 @@ class Editor(Widget):
         self.margin = 0
 
     def set_cursor(self):
-        self.goto(self.row + self.y, self.col + self.x)
+        self.goto(self.col + self.x, self.row + self.y)
         self.cursor(True)
 
     def adjust_cursor_eol(self):
@@ -51,7 +51,7 @@ class Editor(Widget):
         i = self.top_line
         r = self.y
         for c in range(self.height):
-            self.goto(r, self.x)
+            self.goto(self.x, r)
             if i == self.total_lines:
                 self.clear_num_pos(self.width)
             else:
@@ -62,7 +62,7 @@ class Editor(Widget):
 
     def update_line(self):
         self.cursor(False)
-        self.goto(self.row + self.y, self.x)
+        self.goto(self.x, self.row + self.y)
         self.show_line(self.content[self.cur_line], self.cur_line)
         self.set_cursor()
 
@@ -215,7 +215,7 @@ class Editor(Widget):
 
     def deinit_tty(self):
         # Don't leave cursor in the middle of screen
-        self.goto(self.height, 0)
+        self.goto(0, self.height)
         super().deinit_tty()
 
 
