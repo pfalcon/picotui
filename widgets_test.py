@@ -34,6 +34,7 @@ if __name__ == "__main__":
         #d.redraw()
         res = d.loop()
     finally:
+        s.goto(0, 50)
         s.cursor(True)
         s.deinit_tty()
 
