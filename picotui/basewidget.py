@@ -54,18 +54,26 @@ class Widget(Screen):
                 self.kbuf = key[1:]
                 key = key[0:1]
         key = KEYMAP.get(key, key)
+
+        if isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
+            row = key[5] - 33
+            col = key[4] - 33
+            return [col, row]
+
         return key
+
+    def handle_input(self, inp):
+        if isinstance(inp, list):
+            res = self.handle_mouse(inp[0], inp[1])
+        else:
+            res = self.handle_key(inp)
+        return res
 
     def loop(self):
         self.redraw()
         while True:
             key = self.get_input()
-            if isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
-                row = key[5] - 33
-                col = key[4] - 33
-                res = self.handle_mouse(col, row)
-            else:
-                res = self.handle_key(key)
+            res = self.handle_input(key)
 
             if res is not None and res is not True:
                 return res
