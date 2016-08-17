@@ -70,11 +70,6 @@ b"\x1bOS": KEY_F4,
 class Screen:
 
     @staticmethod
-    def enable_mouse():
-        # Mouse reporting - X10 compatibility mode
-        os.write(1, b"\x1b[?9h")
-
-    @staticmethod
     def wr(s):
         # TODO: When Python is 3.5, update this to use only bytes
         if isinstance(s, str):
@@ -193,6 +188,16 @@ class Screen:
     def deinit_tty(cls):
         import termios
         termios.tcsetattr(0, termios.TCSANOW, cls.org_termios)
+
+    @classmethod
+    def enable_mouse(cls):
+        # Mouse reporting - X10 compatibility mode
+        cls.wr(b"\x1b[?9h")
+
+    @classmethod
+    def disable_mouse(cls):
+        # Mouse reporting - X10 compatibility mode
+        cls.wr(b"\x1b[?9l")
 
     @classmethod
     def screen_size(cls):
