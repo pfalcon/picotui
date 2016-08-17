@@ -153,8 +153,8 @@ class WButton(Widget):
 
     def handle_mouse(self, x, y):
         if not self.disabled:
-            if self.finish_dialog:
-                return self
+            if self.finish_dialog is not False:
+                return self.finish_dialog
             else:
                 self.on_click()
 
