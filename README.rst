@@ -1,7 +1,7 @@
 picotui
 =======
 
-Picotui is Text User Interface (TUI) widget library for Python.
+Picotui is a Text User Interface (TUI) widget library for Python.
 You can learn more about it with the help of virtual Q&A session:
 
 Q: There're few TUI libraries for Python, why yet another one?
