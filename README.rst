@@ -4,10 +4,9 @@ picotui
 Picotui is Text User Interface (TUI) widget library for Python.
 You can learn more about it with the help of virtual Q&A session:
 
-Q:
-There're few TUI libraries for Python, why yet another one?
-A:
-Urwid is one well-known such TUI library. Here's entry from its FAQ:
+Q: There're few TUI libraries for Python, why yet another one?
+
+A: Urwid is one well-known such TUI library. Here's entry from its FAQ:
 "How do I create drop-downs, floating windows, and scroll bars?
 You need to start writing some fairly complex widgets. This
 functionality hasn't been added to Urwid yet." So, Urwid is a
@@ -15,12 +14,11 @@ widget library which doesn't have drop downs. Version 0.8.0 of
 Urwid was imported into SVN (and later Git) in 2004. Urwid doesn't
 have drop downs and stuff for 10+ years.
 
-Q:
-Hey, but you cut off the answer from Urwid FAQ. It says: "but if you
+Q: Hey, but you cut off the answer from Urwid FAQ. It says: "but if you
 are willing to write it, we do accept patches". Why didn't you implement
 those widgets for Urwid and contributed them?
-A:
-Why didn't you? No, wait, that's not productive. I didn't implement
+
+A: Why didn't you? No, wait, that's not productive. I didn't implement
 them for Urwid because I don't like its architecture and the fact that
 its widget set is rather weak (so its hard to write new widgets - there
 are not enough examples to start from). And don't get me wrong, but the
@@ -33,11 +31,10 @@ I also found its project management a bit unresponsive. So, after making
 dozen of commits to my fork, I thought it's time to get some breath and
 started picotui.
 
-Q:
-So, sun must shine bright in picotui land, and it must be the best library
-out there?
-A:
-Alas, no. Let me start with the fact that most TUI libraries are based
+Q: So, sun must shine bright in picotui land, and it must be the best
+library out there?
+
+A: Alas, no. Let me start with the fact that most TUI libraries are based
 on curses library for terminal screen management. It makes sure that if
 you update screen, only the minimal set of updates is made. This was
 very important at the era of 300 baud serial connections, let's count:
@@ -60,10 +57,9 @@ calculating coordinates is up to you, etc. Yes, just like that -
 I lacked widgets the most, and that's what I implemented. The rest
 is just KISS.
 
-Q:
-But that's really sad!
-A:
-Indeed, it is. The only good news is that now you have a choice: if
+Q: But that's really sad!
+
+A: Indeed, it is. The only good news is that now you have a choice: if
 you want your app work well with 300 baud modems, you can use other
 libraries, and if you want widgets, you can use picotui.
 
