@@ -23,12 +23,16 @@ if __name__ == "__main__":
         d.add(21, 2, WCheckbox("State"))
         d.add(21, 3, WRadioButton(["Red", "Green", "Yellow"]))
 
+        # Can add a raw string to dialog, will be converted to WLabel
+        d.add(1, 9, "Multiline:")
+        d.add(1, 10, WMultiEntry(30, 3, ["Example", "Text"]))
+
         b = WButton(8, "OK")
-        d.add(3, 10, b)
+        d.add(7, 14, b)
         b.finish_dialog = True
 
         b = WButton(8, "Cancel")
-        d.add(20, 10, b)
+        d.add(24, 14, b)
         b.finish_dialog = True
 
         #d.redraw()
