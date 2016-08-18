@@ -432,6 +432,23 @@ class WTextEntry(EditorExt):
         self.attr_reset()
 
 
+class WMultiEntry(EditorExt):
+
+    focusable = True
+
+    def __init__(self, w, h, lines):
+        super().__init__(width=w, height=h)
+        self.h = h
+        self.w = w
+        self.focus = False
+        self.set_lines(lines)
+
+    def show_line(self, l, i):
+        self.attr_color(COLOR_BLACK, COLOR_CYAN)
+        super().show_line(l, i)
+        self.attr_reset()
+
+
 class WComboBox(WTextEntry):
 
     popup_class = WPopupList
