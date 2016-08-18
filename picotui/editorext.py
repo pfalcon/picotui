@@ -67,11 +67,15 @@ class EditorExt(Editor):
     # If line "no" is already on screen, just reposition cursor to it and
     # return False. Otherwise, show needed line either at the center of
     # screen or at the top, and return True.
-    def goto_line(self, no, center=True):
+    def goto_line(self, no, col=None, center=True):
         self.cur_line = no
 
         if self.line_visible(no):
             self.row = no - self.top_line
+            if col is not None:
+                self.col = col
+                if self.adjust_cursor_eol():
+                    self.redraw()
             self.set_cursor()
             return False
 
@@ -86,6 +90,10 @@ class EditorExt(Editor):
         else:
             self.top_line = no
             self.row = 0
+
+        if col is not None:
+            self.col = col
+            self.adjust_cursor_eol()
         self.redraw()
         return True
 
