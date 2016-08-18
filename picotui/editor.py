@@ -53,7 +53,7 @@ class Editor(Widget):
         for c in range(self.height):
             self.goto(self.x, r)
             if i == self.total_lines:
-                self.clear_num_pos(self.width)
+                self.show_line("", -1)
             else:
                 self.show_line(self.content[i], i)
                 i += 1
