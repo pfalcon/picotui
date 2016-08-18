@@ -63,6 +63,11 @@ A: Indeed, it is. The only good news is that now you have a choice: if
 you want your app work well with 300 baud modems, you can use other
 libraries, and if you want widgets, you can use picotui.
 
+Q: So many words, where's a mandatory screenshot?
+
+A: Sure:
+
+.. image:: https://raw.githubusercontent.com/pfalcon/picotui/master/picotui.png
 
 Known Issues
 ------------
