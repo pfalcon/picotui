@@ -22,6 +22,9 @@ class Dialog(Widget):
         self.border_h = 2
 
     def add(self, x, y, widget):
+        if isinstance(widget, str):
+            # Convert raw string to WLabel
+            widget = WLabel(widget)
         widget.set_xy(self.x + x, self.y + y)
         self.childs.append(widget)
         widget.owner = self
