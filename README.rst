@@ -1,7 +1,12 @@
 picotui
 =======
 
-Picotui is a Text User Interface (TUI) widget library for Python.
+Picotui is a Text User Interface (TUI) widget library for Python3.
+It is known to work with CPython3 and MicroPython (Unix version is
+officially supported for the latter), but should work with any
+Python3 implementation which allows to access stdin/stdout file
+descriptors.
+
 You can learn more about it with the help of virtual Q&A session:
 
 Q: There're few TUI libraries for Python, why yet another one?
