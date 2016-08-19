@@ -53,6 +53,7 @@ if __name__ == "__main__":
     finally:
         s.goto(0, 50)
         s.cursor(True)
+        s.disable_mouse()
         s.deinit_tty()
 
     print("Result:", res)
