@@ -29,14 +29,14 @@ class Dialog(Widget):
         self.childs.append(widget)
         widget.owner = self
 
-    def autosize(self):
+    def autosize(self, extra_w=0, extra_h=0):
         w = 0
         h = 0
         for wid in self.childs:
             w = max(w, wid.x - self.x + wid.w)
             h = max(h, wid.y - self.y + wid.h)
-        self.w = max(self.w, w + self.border_w - 1)
-        self.h = max(self.h, h + self.border_h - 1)
+        self.w = max(self.w, w + self.border_w - 1) + extra_w
+        self.h = max(self.h, h + self.border_h - 1) + extra_h
 
     def redraw(self):
         # Redraw widgets with cursor off
