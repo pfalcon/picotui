@@ -41,6 +41,13 @@ class Dialog(Widget):
         self.h = max(self.h, h + self.border_h - 1) + extra_h
 
     def redraw(self):
+        # Init some state on first redraw
+        if self.focus_idx == -1:
+            self.autosize()
+            self.focus_idx, self.focus_w = self.find_focusable_by_idx(0, 1)
+            if self.focus_w:
+                self.focus_w.focus = True
+
         # Redraw widgets with cursor off
         self.cursor(False)
         self.dialog_box(self.x, self.y, self.w, self.h, self.title)
@@ -65,13 +72,6 @@ class Dialog(Widget):
                 return i, w
             i += 1
         return None, None
-
-    def loop(self):
-        self.autosize()
-        self.focus_idx, self.focus_w = self.find_focusable_by_idx(0, 1)
-        if self.focus_w:
-            self.focus_w.focus = True
-        return super().loop()
 
     def change_focus(self, widget):
         if widget is self.focus_w:
