@@ -20,6 +20,8 @@ class Dialog(Widget):
         # On both sides
         self.border_w = 2
         self.border_h = 2
+        self.focus_w = None
+        self.focus_idx = -1
 
     def add(self, x, y, widget):
         if isinstance(widget, str):
