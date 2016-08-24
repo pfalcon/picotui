@@ -210,3 +210,9 @@ class Screen:
         assert resp.startswith(b"\x1b[8;") and resp[-1:] == b"t"
         vals = resp[:-1].split(b";")
         return (int(vals[2]), int(vals[1]))
+
+    # Set function to redraw an entire (client) screen
+    # This is called to restore original screen, as we don't save it.
+    @classmethod
+    def set_screen_redraw(cls, handler):
+        cls.screen_redraw = handler
