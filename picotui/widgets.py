@@ -285,8 +285,9 @@ class WListBox(EditorExt):
                 self.attr_color(COLOR_BRIGHT_WHITE, COLOR_GREEN)
             else:
                 self.attr_color(COLOR_BLACK, COLOR_GREEN)
-        l = self.render_line(l)[:self.width]
-        self.wr(l)
+        if i != -1:
+            l = self.render_line(l)[:self.width]
+            self.wr(l)
         self.clear_num_pos(self.width - len(l))
         if hlite:
             self.attr_reset()
