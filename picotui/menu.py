@@ -162,3 +162,7 @@ class WMenuBox(ItemSelWidget):
     def handle_mouse(self, x, y):
         if not self.inside(x, y):
             return ACTION_CANCEL
+        y -= self.y + 1
+        if 0 <= y < self.h - 2:
+            self.selected = y
+            return self.items[self.selected][1]
