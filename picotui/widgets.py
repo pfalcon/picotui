@@ -168,6 +168,8 @@ class WButton(Widget):
             return ACTION_PREV
         if key == KEY_DOWN:
             return ACTION_NEXT
+        if key == b" " or key == KEY_ENTER:
+            self.on_click()
 
     def on_click(self):
         pass
