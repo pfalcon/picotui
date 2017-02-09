@@ -19,6 +19,10 @@ COLOR_BRIGHT_MAGENTA  = COLOR_MAGENTA | ATTR_INTENSITY
 COLOR_BRIGHT_CYAN     = COLOR_CYAN | ATTR_INTENSITY
 COLOR_BRIGHT_WHITE    = COLOR_WHITE | ATTR_INTENSITY
 
+def C_PAIR(fg, bg):
+    return (bg << 4) + fg
+
+
 KEY_UP = 1
 KEY_DOWN = 2
 KEY_LEFT = 3
@@ -105,7 +109,10 @@ class Screen:
             Screen.wr("\x1b[%dX" % num)
 
     @staticmethod
-    def attr_color(fg, bg):
+    def attr_color(fg, bg=-1):
+        if bg == -1:
+            bg = fg >> 4
+            fg &= 0xf
         # TODO: Switch to b"%d" % foo when py3.5 is everywhere
         if bg is None:
             if (fg > 8):
