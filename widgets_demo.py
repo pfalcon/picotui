@@ -39,13 +39,21 @@ if __name__ == "__main__":
         d.add(30, 8, "List:")
         d.add(30, 9, WListBox(16, 4, ["choice%d" % i for i in range(10)]))
 
-        d.add(1, 14, "Buttons:")
+        d.add(1, 13, "Button:")
+        b = WButton(9, "Kaboom!")
+        d.add(10, 13, b)
+        # You should actually subclass WButton and override method
+        b.on_click = lambda: 1/0
+
+        d.add(1, 15, "Dialog buttons:")
         b = WButton(8, "OK")
-        d.add(10, 15, b)
+        d.add(10, 16, b)
+        # Instead of having on_click handler, buttons can finish a dialog
+        # with a given result.
         b.finish_dialog = ACTION_OK
 
         b = WButton(8, "Cancel")
-        d.add(30, 15, b)
+        d.add(30, 16, b)
         b.finish_dialog = ACTION_CANCEL
 
         #d.redraw()
