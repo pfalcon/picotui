@@ -147,12 +147,12 @@ class WButton(Widget):
     def redraw(self):
         self.goto(self.x, self.y)
         if self.disabled:
-            self.attr_color(COLOR_WHITE, COLOR_GRAY)
+            self.attr_color(C_WHITE, C_GRAY)
         else:
             if self.focus:
-                self.attr_color(COLOR_BRIGHT_WHITE, COLOR_GREEN)
+                self.attr_color(C_B_WHITE, C_GREEN)
             else:
-                self.attr_color(COLOR_BLACK, COLOR_GREEN)
+                self.attr_color(C_BLACK, C_GREEN)
         self.wr(self.t.center(self.w))
         self.attr_reset()
 
@@ -207,7 +207,7 @@ class WCheckbox(Widget):
     def redraw(self):
         self.goto(self.x, self.y)
         if self.focus:
-            self.attr_color(COLOR_BRIGHT_BLUE, None)
+            self.attr_color(C_B_BLUE, None)
         self.wr("[x] " if self.state else "[ ] ")
         self.wr(self.t)
         self.attr_reset()
@@ -243,7 +243,7 @@ class WRadioButton(Widget):
     def redraw(self):
         i = 0
         if self.focus:
-            self.attr_color(COLOR_BRIGHT_BLUE, None)
+            self.attr_color(C_B_BLUE, None)
         for t in self.titles:
             self.goto(self.x, self.y + i)
             self.wr("(*) " if self.choice == i else "( ) ")
@@ -286,9 +286,9 @@ class WListBox(EditorExt):
         hlite = self.cur_line == i
         if hlite:
             if self.focus:
-                self.attr_color(COLOR_BRIGHT_WHITE, COLOR_GREEN)
+                self.attr_color(C_B_WHITE, C_GREEN)
             else:
-                self.attr_color(COLOR_BLACK, COLOR_GREEN)
+                self.attr_color(C_BLACK, C_GREEN)
         if i != -1:
             l = self.render_line(l)[:self.width]
             self.wr(l)
@@ -366,9 +366,9 @@ class WDropDown(Widget):
     def redraw(self):
         self.goto(self.x, self.y)
         if self.focus:
-            self.attr_color(COLOR_BRIGHT_WHITE, COLOR_CYAN)
+            self.attr_color(C_B_WHITE, C_CYAN)
         else:
-            self.attr_color(COLOR_BLACK, COLOR_CYAN)
+            self.attr_color(C_BLACK, C_CYAN)
         self.wr_fixedw(self.items[self.choice], self.w - 2)
         self.wr(" v")
         self.attr_reset()
@@ -431,10 +431,10 @@ class WTextEntry(EditorExt):
 
     def show_line(self, l, i):
         if self.just_started:
-            fg = COLOR_WHITE
+            fg = C_WHITE
         else:
-            fg = COLOR_BLACK
-        self.attr_color(fg, COLOR_CYAN)
+            fg = C_BLACK
+        self.attr_color(fg, C_CYAN)
         super().show_line(l, i)
         self.attr_reset()
 
@@ -451,7 +451,7 @@ class WMultiEntry(EditorExt):
         self.set_lines(lines)
 
     def show_line(self, l, i):
-        self.attr_color(COLOR_BLACK, COLOR_CYAN)
+        self.attr_color(C_BLACK, C_CYAN)
         super().show_line(l, i)
         self.attr_reset()
 

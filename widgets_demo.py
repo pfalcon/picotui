@@ -8,7 +8,7 @@ if __name__ == "__main__":
     try:
         s.init_tty()
         s.enable_mouse()
-        s.attr_color(COLOR_WHITE, COLOR_BLUE)
+        s.attr_color(C_WHITE, C_BLUE)
         s.cls()
         s.attr_reset()
         d = Dialog(5, 5, 50, 12)

@@ -8,7 +8,7 @@ d = None
 
 # This routine is called to redraw screen "in menu's background"
 def screen_redraw(s):
-    s.attr_color(COLOR_WHITE, COLOR_BLUE)
+    s.attr_color(C_WHITE, C_BLUE)
     s.cls()
     s.attr_reset()
     d.redraw()
