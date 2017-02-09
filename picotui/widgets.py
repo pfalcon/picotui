@@ -164,9 +164,9 @@ class WButton(Widget):
                 self.on_click()
 
     def handle_key(self, key):
-        if key == KEY_UP:
+        if key == KEY_UP or key == KEY_LEFT:
             return ACTION_PREV
-        if key == KEY_DOWN:
+        if key == KEY_DOWN or key == KEY_RIGHT:
             return ACTION_NEXT
         # For dialog buttons (.finish_dialog=True), KEY_ENTER won't
         # reach here.
