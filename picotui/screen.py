@@ -124,7 +124,7 @@ class Screen:
             if (fg > 8):
                 Screen.wr("\x1b[%d;%d;1m" % (fg + 30 - 8, bg + 40))
             else:
-                Screen.wr("\x1b[%d;%dm" % (fg + 30, bg + 40))
+                Screen.wr("\x1b[0;%d;%dm" % (fg + 30, bg + 40))
 
     @staticmethod
     def attr_reset():
