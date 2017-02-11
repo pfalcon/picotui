@@ -7,7 +7,7 @@ from picotui.context import Context
 d = None
 
 # This routine is called to redraw screen "in menu's background"
-def screen_redraw(s):
+def screen_redraw(s, allow_cursor=False):
     s.attr_color(C_WHITE, C_BLUE)
     s.cls()
     s.attr_reset()

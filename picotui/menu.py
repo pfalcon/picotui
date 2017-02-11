@@ -26,6 +26,8 @@ class WMenuBar(ItemSelWidget):
         self.permanent = False
 
     def redraw(self):
+        if self.focus:
+            self.cursor(False)
         self.goto(self.x, self.y)
         i = 0
         for name, pulldown in self.items:
@@ -38,10 +40,10 @@ class WMenuBar(ItemSelWidget):
             i += 1
 
     def close(self):
-        self.screen_redraw()
         self.focus = False
         if self.permanent:
             self.redraw()
+        self.screen_redraw(True)
 
     def get_item_x(self, item_no):
         x = self.x
