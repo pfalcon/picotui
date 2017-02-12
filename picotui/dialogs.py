@@ -2,6 +2,8 @@ from .widgets import *
 
 
 def add_ok_cancel_buttons(d):
+    if d.w < 20:
+        d.w = 20
     hw = d.w // 2
     off1 = (hw + 1) // 2 - 4
     off2 = (d.w - hw) + hw // 2 - 4
@@ -41,3 +43,20 @@ class DMultiEntry(Dialog):
         if res == ACTION_CANCEL:
             return res
         return self.widget.content
+
+
+class DConfirmation(Dialog):
+
+    def __init__(self, lines, title=""):
+        super().__init__(10, 5, title=title)
+        if not isinstance(lines, list):
+            lines = [lines]
+        i = 1
+        for l in lines:
+            self.add(2, i, WLabel(l))
+            i += 1
+        self.autosize(extra_w=1, extra_h=1)
+        add_ok_cancel_buttons(self)
+
+    def result(self):
+        return self.loop()
