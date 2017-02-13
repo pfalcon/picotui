@@ -2,6 +2,8 @@ from .widgets import *
 
 
 def add_ok_cancel_buttons(d):
+    if d.h == 0:
+        d.autosize(0, 1)
     if d.w < 20:
         d.w = 20
     hw = d.w // 2
