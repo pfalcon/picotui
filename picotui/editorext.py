@@ -49,6 +49,27 @@ class Viewer(Editor):
             return True
 
 
+# Viewer with colored lines, (whole line same color)
+class LineColorViewer(Viewer):
+
+    def show_line(self, l, i):
+        if self.is_dict_color:
+            c = self.lines_c.get(i, self.def_c)
+        else:
+            try:
+                c = self.lines_c[i]
+            except IndexError:
+                c = self.def_c
+        self.attr_color(c)
+        super().show_line(l, i)
+        self.attr_reset()
+
+    def set_line_colors(self, default_color, color_list={}):
+        self.def_c = default_color
+        self.lines_c = color_list
+        self.is_dict_color = isinstance(color_list, dict)
+
+
 class EditorExt(Editor):
 
     screen_width = 80
