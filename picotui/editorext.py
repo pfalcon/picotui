@@ -70,6 +70,29 @@ class LineColorViewer(Viewer):
         self.is_dict_color = isinstance(color_list, dict)
 
 
+# Viewer with color support, (echo line may consist of spans
+# of different colors)
+class CharColorViewer(Viewer):
+
+    def show_line(self, l, i):
+        # TODO: handle self.margin, self.width
+        length = 0
+        for span in l:
+            if isinstance(span, tuple):
+                span, c = span
+            else:
+                c = self.def_c
+            self.attr_color(c)
+            self.wr(span)
+            length += len(span)
+        self.attr_color(self.def_c)
+        self.clear_num_pos(self.width - length)
+        self.attr_reset()
+
+    def set_def_color(self, default_color):
+        self.def_c = default_color
+
+
 class EditorExt(Editor):
 
     screen_width = 80
