@@ -168,13 +168,9 @@ class WButton(Widget):
             return ACTION_PREV
         if key == KEY_DOWN or key == KEY_RIGHT:
             return ACTION_NEXT
-<<<<<<< HEAD
         # For dialog buttons (.finish_dialog=True), KEY_ENTER won't
         # reach here.
         if key == KEY_ENTER:
-=======
-        if key == b' ' or key == KEY_ENTER:
->>>>>>> 281963df5034f11b7c1945637de1479985351d65
             self.on_click()
 
     def on_click(self):
