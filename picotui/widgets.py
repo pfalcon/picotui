@@ -255,11 +255,15 @@ class WRadioButton(Widget):
         self.choice = y - self.y
         self.redraw()
 
+    def increment_choice(self, d):
+        self.choice = (self.choice + d) % len(self.titles)
+        self.redraw()
+
     def handle_key(self, key):
         if key == KEY_UP:
-            return ACTION_PREV
-        if key == KEY_DOWN:
-            return ACTION_NEXT
+            self.increment_choice(-1)
+        elif key == KEY_DOWN:
+            self.increment_choice(1)
 
 
 class WListBox(EditorExt):
