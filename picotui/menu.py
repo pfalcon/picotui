@@ -2,18 +2,6 @@ from .screen import *
 from .basewidget import *
 
 
-class ItemSelWidget(Widget):
-
-    def __init__(self, items):
-        super().__init__()
-        self.items = items
-        self.selected = 0
-
-    def move_sel(self, direction):
-        self.selected = (self.selected + direction) % len(self.items)
-        self.redraw()
-
-
 class WMenuBar(ItemSelWidget):
 
     def __init__(self, menu_struct):

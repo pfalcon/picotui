@@ -77,3 +77,16 @@ class Widget(Screen):
 
             if res is not None and res is not True:
                 return res
+
+
+# Widget with few internal selectable items
+class ItemSelWidget(Widget):
+
+    def __init__(self, items):
+        super().__init__()
+        self.items = items
+        self.selected = 0
+
+    def move_sel(self, direction):
+        self.selected = (self.selected + direction) % len(self.items)
+        self.redraw()
