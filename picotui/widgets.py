@@ -229,41 +229,36 @@ class WCheckbox(Widget):
             self.flip()
 
 
-class WRadioButton(Widget):
+class WRadioButton(ItemSelWidget):
 
     focusable = True
 
-    def __init__(self, titles):
-        self.titles = titles
-        self.choice = 0
-        self.h = len(titles)
-        self.w = 4 + self.longest(titles)
+    def __init__(self, items):
+        super().__init__(items)
+        self.h = len(items)
+        self.w = 4 + self.longest(items)
         self.focus = False
 
     def redraw(self):
         i = 0
         if self.focus:
             self.attr_color(C_B_BLUE, None)
-        for t in self.titles:
+        for t in self.items:
             self.goto(self.x, self.y + i)
-            self.wr("(*) " if self.choice == i else "( ) ")
+            self.wr("(*) " if self.selected == i else "( ) ")
             self.wr(t)
             i += 1
         self.attr_reset()
 
     def handle_mouse(self, x, y):
-        self.choice = y - self.y
-        self.redraw()
-
-    def increment_choice(self, d):
-        self.choice = (self.choice + d) % len(self.titles)
+        self.selected = y - self.y
         self.redraw()
 
     def handle_key(self, key):
         if key == KEY_UP:
-            self.increment_choice(-1)
+            self.move_sel(-1)
         elif key == KEY_DOWN:
-            self.increment_choice(1)
+            self.move_sel(1)
 
 
 class WListBox(EditorExt):
