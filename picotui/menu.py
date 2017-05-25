@@ -20,7 +20,7 @@ class WMenuBar(ItemSelWidget):
         i = 0
         for name, pulldown in self.items:
             if self.focus and i == self.selected:
-                self.attr_color(C_WHITE, C_BLACK)
+                self.attr_color(C_B_WHITE, C_BLACK)
             self.wr(b"  ")
             self.wr(name)
             self.wr(b"  ")
@@ -130,7 +130,7 @@ class WMenuBox(ItemSelWidget):
         for item in self.items:
             self.goto(self.x + 1, self.y + i + 1)
             if i == self.selected:
-                self.attr_color(C_WHITE, C_BLACK)
+                self.attr_color(C_B_WHITE, C_BLACK)
             self.wr_fixedw(item[0], self.w - 2)
             self.attr_reset()
             i += 1
