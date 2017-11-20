@@ -355,11 +355,12 @@ class WDropDown(Widget):
 
     focusable = True
 
-    def __init__(self, w, items):
+    def __init__(self, w, items, *, dropdown_h=5):
         self.items = items
         self.choice = 0
         self.h = 1
         self.w = w
+        self.dropdown_h = dropdown_h
         self.focus = False
 
     def redraw(self):
@@ -373,7 +374,7 @@ class WDropDown(Widget):
         self.attr_reset()
 
     def handle_mouse(self, x, y):
-        popup = WPopupList(self.x, self.y + 1, self.w, 5, self.items)
+        popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items)
         res = popup.loop()
         if res == ACTION_OK:
             self.choice = popup.get_choice()
