@@ -369,9 +369,9 @@ class WDropDown(Widget):
             self.attr_color(C_B_WHITE, C_CYAN)
         else:
             self.attr_color(C_BLACK, C_CYAN)
-        self.wr_fixedw(self.items[self.choice], self.w - 2)
-        self.wr(" v")
+        self.wr_fixedw(self.items[self.choice], self.w - 1)
         self.attr_reset()
+        self.wr(symbols.DOWN_ARROW)
 
     def handle_mouse(self, x, y):
         popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items)
