@@ -356,6 +356,7 @@ class WDropDown(Widget):
     focusable = True
 
     def __init__(self, w, items, *, dropdown_h=5):
+        Widget.__init__(self)
         self.items = items
         self.choice = 0
         self.h = 1
@@ -378,6 +379,7 @@ class WDropDown(Widget):
         res = popup.loop()
         if res == ACTION_OK:
             self.choice = popup.get_choice()
+            self.signal("changed")
         self.owner.redraw()
 
     def handle_key(self, key):
