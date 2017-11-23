@@ -253,6 +253,7 @@ class WRadioButton(ItemSelWidget):
     def handle_mouse(self, x, y):
         self.selected = y - self.y
         self.redraw()
+        self.signal("changed")
 
     def handle_key(self, key):
         if key == KEY_UP:
