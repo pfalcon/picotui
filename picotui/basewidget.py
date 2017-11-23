@@ -90,3 +90,4 @@ class ItemSelWidget(Widget):
     def move_sel(self, direction):
         self.selected = (self.selected + direction) % len(self.items)
         self.redraw()
+        self.signal("changed")
