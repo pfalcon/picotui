@@ -51,7 +51,7 @@ class WMenuBar(ItemSelWidget):
             sel = self.items[self.selected][1]
             if key == KEY_ESC:
                 self.close()
-                return ACTION_CANCEL
+                return ACTION.CANCEL
             elif key == KEY_LEFT:
                 if self.pulled_down:
                     self.screen_redraw()
@@ -72,13 +72,13 @@ class WMenuBar(ItemSelWidget):
             if isinstance(sel, Widget) and self.pulled_down:
                 sel.set_xy(self.get_item_x(self.selected), self.y + 1)
                 res = sel.loop()
-                if res == ACTION_PREV:
+                if res == ACTION.PREV:
                     key = KEY_LEFT
                     continue
-                if res == ACTION_NEXT:
+                if res == ACTION.NEXT:
                     key = KEY_RIGHT
                     continue
-                if res == ACTION_CANCEL:
+                if res == ACTION.CANCEL:
                     self.pulled_down = False
                     self.screen_redraw()
                     self.redraw()
@@ -137,21 +137,21 @@ class WMenuBox(ItemSelWidget):
 
     def handle_key(self, key):
         if key == KEY_ESC:
-            return ACTION_CANCEL
+            return ACTION.CANCEL
         elif key == KEY_UP:
             self.move_sel(-1)
         elif key == KEY_DOWN:
             self.move_sel(1)
         elif key == KEY_LEFT:
-            return ACTION_PREV
+            return ACTION.PREV
         elif key == KEY_RIGHT:
-            return ACTION_NEXT
+            return ACTION.NEXT
         elif key == KEY_ENTER:
             return self.items[self.selected][1]
 
     def handle_mouse(self, x, y):
         if not self.inside(x, y):
-            return ACTION_CANCEL
+            return ACTION.CANCEL
         y -= self.y + 1
         if 0 <= y < self.h - 2:
             self.selected = y

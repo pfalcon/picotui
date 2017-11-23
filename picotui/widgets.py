@@ -93,7 +93,7 @@ class Dialog(Widget):
         if key == KEY_QUIT:
             return key
         if key == KEY_ESC and self.finish_on_esc:
-            return ACTION_CANCEL
+            return ACTION.CANCEL
         if key == KEY_TAB:
             self.move_focus(1)
         elif key == KEY_SHIFT_TAB:
@@ -103,9 +103,9 @@ class Dialog(Widget):
                 if self.focus_w.finish_dialog is not False:
                     return self.focus_w.finish_dialog
             res = self.focus_w.handle_key(key)
-            if res == ACTION_PREV:
+            if res == ACTION.PREV:
                 self.move_focus(-1)
-            elif res == ACTION_NEXT:
+            elif res == ACTION.NEXT:
                 self.move_focus(1)
             else:
                 return res
@@ -114,7 +114,6 @@ class Dialog(Widget):
         # Work in absolute coordinates
         if self.inside(x, y):
             self.focus_idx, w = self.find_focusable_by_xy(x, y)
-#            print(w)
             if w:
                 self.change_focus(w)
                 return w.handle_mouse(x, y)
@@ -165,9 +164,9 @@ class WButton(Widget):
 
     def handle_key(self, key):
         if key == KEY_UP or key == KEY_LEFT:
-            return ACTION_PREV
+            return ACTION.PREV
         if key == KEY_DOWN or key == KEY_RIGHT:
-            return ACTION_NEXT
+            return ACTION.NEXT
         # For dialog buttons (.finish_dialog=True), KEY_ENTER won't
         # reach here.
         if key == KEY_ENTER:
@@ -222,9 +221,9 @@ class WCheckbox(Widget):
 
     def handle_key(self, key):
         if key == KEY_UP:
-            return ACTION_PREV
+            return ACTION.PREV
         if key == KEY_DOWN:
-            return ACTION_NEXT
+            return ACTION.NEXT
         if key == b" ":
             self.flip()
 
@@ -323,15 +322,15 @@ class WPopupList(Dialog):
 
         def handle_key(self, key):
             if key == KEY_ENTER:
-                return ACTION_OK
+                return ACTION.OK
             if key == KEY_ESC:
-                return ACTION_CANCEL
+                return ACTION.CANCEL
             return super().handle_key(key)
 
         def handle_mouse(self, x, y):
             if super().handle_mouse(x, y) == True:
                 # (Processed) mouse click finishes selection
-                return ACTION_OK
+                return ACTION.OK
 
     def __init__(self, x, y, w, h, items):
         super().__init__(x, y, w, h)
@@ -340,7 +339,7 @@ class WPopupList(Dialog):
 
     def handle_mouse(self, x, y):
         if not self.inside(x, y):
-            return ACTION_CANCEL
+            return ACTION.CANCEL
         return super().handle_mouse(x, y)
 
     def get_choice(self):
@@ -378,7 +377,7 @@ class WDropDown(Widget):
     def handle_mouse(self, x, y):
         popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items)
         res = popup.loop()
-        if res == ACTION_OK:
+        if res == ACTION.OK:
             self.choice = popup.get_choice()
             self.signal("changed")
         self.owner.redraw()
@@ -487,7 +486,7 @@ class WComboBox(WTextEntry):
         popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, self.popup_h, choices)
         popup.main_widget = self
         res = popup.loop()
-        if res == ACTION_OK:
+        if res == ACTION.OK:
             val = popup.get_selected_value()
             if val is not None:
                 self.set_lines([val])
@@ -535,7 +534,7 @@ class WAutoComplete(WComboBox):
     def get_choices(self, substr, only_prefix=False):
         substr = substr.lower()
         if only_prefix:
-            choices = list(filter(lambda x: x.lower().startswith(substr), self.items))
+            choices = [x for x in self.items if x.lower().startswith(substr)]
         else:
-            choices = list(filter(lambda x: substr in x.lower(), self.items))
+            choices = [x for x in self.items if substr in x.lower()]
         return choices
