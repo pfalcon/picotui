@@ -122,14 +122,16 @@ class Dialog(Widget):
 
 class WLabel(Widget):
 
-    def __init__(self, text):
+    def __init__(self, text, w=0):
         self.t = text
         self.h = 1
-        self.w = len(text)
+        self.w = w
+        if not w:
+            self.w = len(text)
 
     def redraw(self):
         self.goto(self.x, self.y)
-        self.wr(self.t)
+        self.wr_fixedw(self.t, self.w)
 
 
 class WButton(Widget):
