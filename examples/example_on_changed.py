@@ -30,6 +30,10 @@ if __name__ == "__main__":
         w_dropdown = WDropDown(10, ["Red", "Green", "Yellow"])
         d.add(11, 4, w_dropdown)
 
+        d.add(30, 1, "List:")
+        w_listbox = WListBox(16, 4, ["choice%d" % i for i in range(10)])
+        d.add(30, 2, w_listbox)
+
         # Now labels mirroring last selected value of widgets above
 
         d.add(1, 8, "Selected checkbox value:")
@@ -61,6 +65,17 @@ if __name__ == "__main__":
             w_dropdown_val.t = val
             w_dropdown_val.redraw()
         w_dropdown.on("changed", dropdown_changed)
+
+
+        d.add(1, 11, "Selected listbox value:")
+        w_listbox_val = WLabel("", w=8)
+        d.add(30, 11, w_listbox_val)
+
+        def listbox_changed(w):
+            val = w.items[w.cur_line]
+            w_listbox_val.t = val
+            w_listbox_val.redraw()
+        w_listbox.on("changed", listbox_changed)
 
 
         b = WButton(8, "OK")
