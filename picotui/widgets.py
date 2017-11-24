@@ -302,11 +302,13 @@ class WListBox(EditorExt):
     def handle_mouse(self, x, y):
         res = super().handle_mouse(x, y)
         self.redraw()
+        self.signal("changed")
         return res
 
     def handle_key(self, key):
         res = super().handle_key(key)
         self.redraw()
+        self.signal("changed")
         return res
 
     def handle_edit_key(self, key):
