@@ -43,7 +43,7 @@ if __name__ == "__main__":
         b = WButton(9, "Kaboom!")
         d.add(10, 13, b)
         # You should actually subclass WButton and override method
-        b.on_click = lambda: 1/0
+        b.on("click", lambda w: 1/0)
 
         d.add(1, 15, "Dialog buttons:")
         b = WButton(8, "OK")
