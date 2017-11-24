@@ -139,6 +139,7 @@ class WButton(Widget):
     focusable = True
 
     def __init__(self, w, text):
+        Widget.__init__(self)
         self.t = text
         self.h = 1
         self.w = w or len(text) + 2
@@ -163,7 +164,7 @@ class WButton(Widget):
             if self.finish_dialog is not False:
                 return self.finish_dialog
             else:
-                self.on_click()
+                self.signal("click")
 
     def handle_key(self, key):
         if key == KEY_UP or key == KEY_LEFT:
@@ -173,7 +174,7 @@ class WButton(Widget):
         # For dialog buttons (.finish_dialog=True), KEY_ENTER won't
         # reach here.
         if key == KEY_ENTER:
-            self.on_click()
+            self.signal("click")
 
     def on_click(self):
         pass
