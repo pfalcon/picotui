@@ -1,6 +1,5 @@
 from .basewidget import *
 from .editorext import *
-from . import symbols
 
 
 class Dialog(Widget):
@@ -378,7 +377,7 @@ class WDropDown(Widget):
             self.attr_color(C_BLACK, C_CYAN)
         self.wr_fixedw(self.items[self.choice], self.w - 1)
         self.attr_reset()
-        self.wr(symbols.DOWN_ARROW)
+        self.wr(DOWN_ARROW)
 
     def handle_mouse(self, x, y):
         popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items)
@@ -481,7 +480,7 @@ class WComboBox(WTextEntry):
 
     def redraw(self):
         self.goto(self.x + self.w - 1, self.y)
-        self.wr(symbols.DOWN_ARROW)
+        self.wr(DOWN_ARROW)
         super().redraw()
 
     def get_choices(self, substr):
