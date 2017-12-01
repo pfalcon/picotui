@@ -1,6 +1,5 @@
 from .basewidget import *
 from .editorext import *
-from . import symbols
 
 
 class Dialog(Widget):
@@ -139,6 +138,7 @@ class WButton(Widget):
     focusable = True
 
     def __init__(self, w, text):
+        Widget.__init__(self)
         self.t = text
         self.h = 1
         self.w = w or len(text) + 2
@@ -163,7 +163,7 @@ class WButton(Widget):
             if self.finish_dialog is not False:
                 return self.finish_dialog
             else:
-                self.on_click()
+                self.signal("click")
 
     def handle_key(self, key):
         if key == KEY_UP or key == KEY_LEFT:
@@ -173,7 +173,7 @@ class WButton(Widget):
         # For dialog buttons (.finish_dialog=True), KEY_ENTER won't
         # reach here.
         if key == KEY_ENTER:
-            self.on_click()
+            self.signal("click")
 
     def on_click(self):
         pass
@@ -377,7 +377,7 @@ class WDropDown(Widget):
             self.attr_color(C_BLACK, C_CYAN)
         self.wr_fixedw(self.items[self.choice], self.w - 1)
         self.attr_reset()
-        self.wr(symbols.DOWN_ARROW)
+        self.wr(DOWN_ARROW)
 
     def handle_mouse(self, x, y):
         popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items)
@@ -480,7 +480,7 @@ class WComboBox(WTextEntry):
 
     def redraw(self):
         self.goto(self.x + self.w - 1, self.y)
-        self.wr(symbols.DOWN_ARROW)
+        self.wr(DOWN_ARROW)
         super().redraw()
 
     def get_choices(self, substr):

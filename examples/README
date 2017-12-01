@@ -1,0 +1,8 @@
+This directory contains additional examples showing various aspects of
+picotui usage.
+
+These examples required picotui being in PYTHONPATH, which can be
+achieved by installing it, or setting path explicitly, e.g. by
+running examples like:
+
+    PYTHONPATH=.. python3 example_on_changed.py
