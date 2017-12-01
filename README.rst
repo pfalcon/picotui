@@ -55,9 +55,9 @@ let's do just that. It's also grounded in the fact that nobody uses
 with instant updates, most of the remaining are run over LANs which
 also offer fast updates. Modern basic serial speed is 115200 which is
 still too slow for real-time fullscreen updates though. That's why I
-say alas. Beyond optimized screen updates, picotui lacks many other
-things too: e.g., double-buffering (so redrawing previous screen
-content behind pop-ups is up ot you), it lacks geometry managers, so
+say "alas". Beyond optimized screen updates, picotui lacks many other
+things too: e.g., double-buffering (so redrawing the previous screen
+content behind pop-ups is up to you), it lacks geometry managers, so
 calculating coordinates is up to you, etc. Yes, just like that -
 I lacked widgets the most, and that's what I implemented. The rest
 is just KISS.
