@@ -108,6 +108,16 @@ class Screen:
             self.wr(s)
             top += 1
 
+    def draw_fillbox(self, left, top, width, height, color):
+        self.attr_color(color, color)
+        s = u"\u2588" * width
+        bottom = top + height
+        while top < bottom:
+            self.goto(left, top)
+            self.wr(s)
+            top += 1
+        self.attr_reset()
+    
     def dialog_box(self, left, top, width, height, title=""):
         self.clear_box(left + 1, top + 1, width - 2, height - 2)
         self.draw_box(left, top, width, height)

@@ -194,6 +194,21 @@ class WFrame(Widget):
             self.wr(" %s " % self.t)
 
 
+class WFillbox(Widget):
+
+    def __init__(self, w, h, title="", color=C_BLACK):
+        self.w = w
+        self.h = h
+        self.t = title
+        self.color = color
+        
+    def redraw(self):
+        self.draw_fillbox(self.x, self.y, self.w, self.h, self.color)
+        if self.t:
+            pos = 1
+            self.goto(self.x + pos, self.y)
+            self.wr(" %s " % self.t)
+
 class WCheckbox(Widget):
 
     focusable = True
