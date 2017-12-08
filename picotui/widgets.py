@@ -194,6 +194,16 @@ class WFrame(Widget):
             self.wr(" %s " % self.t)
 
 
+class WFillbox(Widget):
+
+    def __init__(self, w, h, color=C_BLACK):
+        self.w = w
+        self.h = h
+        self.color = color
+        
+    def redraw(self):
+        self.draw_fillbox(self.x, self.y, self.w, self.h, self.color)
+
 class WCheckbox(Widget):
 
     focusable = True
@@ -268,7 +278,7 @@ class WListBox(EditorExt):
 
     focusable = True
 
-    def __init__(self, w, h, items):
+    def __init__(self, w, h, items, fcolor = C_WHITE, bcolor = C_BLACK, scolor = C_GREEN):
         EditorExt.__init__(self)
         self.items = items
         self.choice = 0
@@ -278,6 +288,9 @@ class WListBox(EditorExt):
         self.h = h
         self.set_lines(items)
         self.focus = False
+        self.fcolor = fcolor
+        self.bcolor = bcolor
+        self.scolor = scolor
 
     def render_line(self, l):
         # Default identity implementation is suitable for
@@ -288,15 +301,16 @@ class WListBox(EditorExt):
         hlite = self.cur_line == i
         if hlite:
             if self.focus:
-                self.attr_color(C_B_WHITE, C_GREEN)
+                self.attr_color(self.fcolor, self.scolor)
             else:
-                self.attr_color(C_BLACK, C_GREEN)
+                self.attr_color(C_BLACK, self.scolor)
+        else:
+            self.attr_color(self.fcolor, self.bcolor)
         if i != -1:
             l = self.render_line(l)[:self.width]
             self.wr(l)
         self.clear_num_pos(self.width - len(l))
-        if hlite:
-            self.attr_reset()
+        self.attr_reset()
 
     def handle_mouse(self, x, y):
         res = super().handle_mouse(x, y)
