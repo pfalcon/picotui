@@ -8,7 +8,7 @@ if sys.version_info < (3, 0):
 
 
 setup(name='picotui',
-      version='0.9.2',
+      version='0.9.3',
       description="""A simple text user interface (TUI) library.""",
       long_description=open('README.rst').read(),
       url='https://github.com/pfalcon/picotui',
