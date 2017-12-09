@@ -84,8 +84,9 @@ and examples (see below).
 Examples
 --------
 
-* widgets_demo.py - Shows repertoire of widgets, inside a dialog.
-* menu_demo.py - Shows a "fullscreen" application with a main menu.
+* example_widgets.py - Shows repertoire of widgets, inside a dialog.
+* example_menu.py - Shows a "fullscreen" application with a main menu.
+* example_dialogs.py - Shows some standard dialogs.
 * examples/ - More assorted examples.
 
 Known Issues
