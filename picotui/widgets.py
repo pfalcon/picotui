@@ -123,16 +123,20 @@ class Dialog(Widget):
 
 class WLabel(Widget):
 
-    def __init__(self, text, w=0):
+    def __init__(self, text, w=0, fcolor=C_WHITE, bcolor=C_BLACK):
         self.t = text
         self.h = 1
         self.w = w
+        self.fcolor = fcolor
+        self.bcolor = bcolor
         if not w:
             self.w = len(text)
 
     def redraw(self):
         self.goto(self.x, self.y)
+        self.attr_color(self.fcolor, self.bcolor)
         self.wr_fixedw(self.t, self.w)
+        self.attr_reset()
 
 
 class WButton(Widget):
@@ -183,13 +187,15 @@ class WButton(Widget):
 
 class WFrame(Widget):
 
-    def __init__(self, w, h, title=""):
+    def __init__(self, w, h, title="", fcolor=C_WHITE, bcolor=C_BLACK):
         self.w = w
         self.h = h
         self.t = title
+        self.fcolor = fcolor
+        self.bcolor = bcolor
 
     def redraw(self):
-        self.draw_box(self.x, self.y, self.w, self.h)
+        self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor)
         if self.t:
             pos = 1
             self.goto(self.x + pos, self.y)
@@ -377,7 +383,7 @@ class WDropDown(Widget):
 
     focusable = True
 
-    def __init__(self, w, items, *, dropdown_h=5):
+    def __init__(self, w, items, *, dropdown_h=5, scolor=C_CYAN):
         Widget.__init__(self)
         self.items = items
         self.choice = 0
@@ -385,13 +391,14 @@ class WDropDown(Widget):
         self.w = w
         self.dropdown_h = dropdown_h
         self.focus = False
+        self.scolor = scolor
 
     def redraw(self):
         self.goto(self.x, self.y)
         if self.focus:
-            self.attr_color(C_B_WHITE, C_CYAN)
+            self.attr_color(C_B_WHITE, self.scolor)
         else:
-            self.attr_color(C_BLACK, C_CYAN)
+            self.attr_color(C_BLACK, self.scolor)
         self.wr_fixedw(self.items[self.choice], self.w - 1)
         self.attr_reset()
         self.wr(DOWN_ARROW)
