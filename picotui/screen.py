@@ -69,7 +69,8 @@ class Screen:
         else:
             Screen.wr(b"\x1b[?25l")
 
-    def draw_box(self, left, top, width, height):
+    def draw_box(self, left, top, width, height, fcolor=C_WHITE, bcolor=C_BLACK, fill=True):
+        self.attr_color(fcolor, bcolor)
         # Use http://www.utf8-chartable.de/unicode-utf8-table.pl
         # for utf-8 pseudographic reference
         bottom = top + height - 1
@@ -96,8 +97,17 @@ class Screen:
             self.wr(b"\xe2\x94\x82")
             self.goto(left + width - 1, top)
             self.wr(b"\xe2\x94\x82")
-            top += 1
 
+            if (fill):
+                # "█"
+                self.goto(left + 1, top)
+                self.attr_color(bcolor, bcolor)
+                self.wr(u"\u2588" * (width - 2))
+                self.attr_color(fcolor, bcolor)
+            
+            top += 1
+        self.attr_reset()
+        
     def clear_box(self, left, top, width, height):
         # doesn't work
         #self.wr("\x1b[%s;%s;%s;%s$z" % (top + 1, left + 1, top + height, left + width))
@@ -108,9 +118,9 @@ class Screen:
             self.wr(s)
             top += 1
 
-    def dialog_box(self, left, top, width, height, title=""):
+    def dialog_box(self, left, top, width, height, title="", fcolor=C_WHITE, bcolor=C_BLACK):
         self.clear_box(left + 1, top + 1, width - 2, height - 2)
-        self.draw_box(left, top, width, height)
+        self.draw_box(left, top, width, height, fcolor, bcolor)
         if title:
             #pos = (width - len(title)) / 2
             pos = 1

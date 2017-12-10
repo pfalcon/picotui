@@ -1,7 +1,6 @@
 #
-# This example shows usage of "changed" event handlers to propagate
-# current state of widgets to other parts of an app (to other widgets
-# in this case).
+# This example shows how to change the items of a ListBox widget 
+# when the current selection of a DropDown widget changes.
 #
 from picotui.screen import *
 from picotui.widgets import *
