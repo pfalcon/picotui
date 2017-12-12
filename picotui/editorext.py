@@ -159,7 +159,7 @@ class EditorExt(Editor):
     def dialog_edit_line(self, left=None, top=8, width=40, height=3, line="", title=""):
         if left is None:
             left = (self.screen_width - width) / 2
-        self.dialog_box(left, top, width, height, title)
+        self.dialog_box(left, top, width, height, title, C_WHITE, C_BLACK)
         e = LineEditor(left + 1, top + 1, width - 2, height - 2)
         return e.edit(line)
 
