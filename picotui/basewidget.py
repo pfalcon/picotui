@@ -51,8 +51,9 @@ class Widget(Screen):
         else:
             key = os.read(0, 32)
             if key[0] != 0x1b:
-                self.kbuf = key[1:]
-                key = key[0:1]
+                key = key.decode()
+                self.kbuf = key[1:].encode()
+                key = key[0:1].encode()
         key = KEYMAP.get(key, key)
 
         if isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
