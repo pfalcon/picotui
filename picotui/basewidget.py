@@ -80,6 +80,13 @@ class Widget(Screen):
                 return res
 
 
+class ChoiceWidget(Widget):
+
+    def __init__(self, choice):
+        super().__init__()
+        self.choice = choice
+
+
 # Widget with few internal selectable items
 class ItemSelWidget(Widget):
 
