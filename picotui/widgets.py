@@ -357,14 +357,13 @@ class WPopupList(Dialog):
         return self.list.content[self.list.cur_line]
 
 
-class WDropDown(Widget):
+class WDropDown(ChoiceWidget):
 
     focusable = True
 
     def __init__(self, w, items, *, dropdown_h=5):
-        Widget.__init__(self)
+        super().__init__(0)
         self.items = items
-        self.choice = 0
         self.h = 1
         self.w = w
         self.dropdown_h = dropdown_h
