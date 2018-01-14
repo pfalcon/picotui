@@ -194,28 +194,27 @@ class WFrame(Widget):
             self.wr(" %s " % self.t)
 
 
-class WCheckbox(Widget):
+class WCheckbox(ChoiceWidget):
 
     focusable = True
 
-    def __init__(self, title, state=False):
-        super().__init__()
+    def __init__(self, title, choice=False):
+        super().__init__(choice)
         self.t = title
         self.h = 1
         self.w = 4 + len(title)
-        self.state = state
         self.focus = False
 
     def redraw(self):
         self.goto(self.x, self.y)
         if self.focus:
             self.attr_color(C_B_BLUE, None)
-        self.wr("[x] " if self.state else "[ ] ")
+        self.wr("[x] " if self.choice else "[ ] ")
         self.wr(self.t)
         self.attr_reset()
 
     def flip(self):
-        self.state = not self.state
+        self.choice = not self.choice
         self.redraw()
         self.signal("changed")
 
