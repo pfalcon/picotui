@@ -263,14 +263,14 @@ class WRadioButton(ItemSelWidget):
             self.move_sel(1)
 
 
-class WListBox(EditorExt):
+class WListBox(EditorExt, ChoiceWidget):
 
     focusable = True
 
     def __init__(self, w, h, items):
         EditorExt.__init__(self)
+        ChoiceWidget.__init__(self, 0)
         self.items = items
-        self.choice = 0
         self.width = w
         self.w = w
         self.height = h
@@ -299,12 +299,14 @@ class WListBox(EditorExt):
 
     def handle_mouse(self, x, y):
         res = super().handle_mouse(x, y)
+        self.choice = self.cur_line
         self.redraw()
         self.signal("changed")
         return res
 
     def handle_key(self, key):
         res = super().handle_key(key)
+        self.choice = self.cur_line
         self.redraw()
         self.signal("changed")
         return res
