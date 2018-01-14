@@ -13,7 +13,7 @@ from .basewidget import Widget
 class Editor(Widget):
 
     def __init__(self, x=0, y=0, width=80, height=24):
-        super().__init__()
+        Widget.__init__(self)
         self.top_line = 0
         self.cur_line = 0
         self.row = 0
