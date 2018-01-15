@@ -88,14 +88,13 @@ class ChoiceWidget(Widget):
 
 
 # Widget with few internal selectable items
-class ItemSelWidget(Widget):
+class ItemSelWidget(ChoiceWidget):
 
     def __init__(self, items):
-        super().__init__()
+        super().__init__(0)
         self.items = items
-        self.selected = 0
 
     def move_sel(self, direction):
-        self.selected = (self.selected + direction) % len(self.items)
+        self.choice = (self.choice + direction) % len(self.items)
         self.redraw()
         self.signal("changed")
