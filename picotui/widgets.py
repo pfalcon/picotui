@@ -246,13 +246,13 @@ class WRadioButton(ItemSelWidget):
             self.attr_color(C_B_BLUE, None)
         for t in self.items:
             self.goto(self.x, self.y + i)
-            self.wr("(*) " if self.selected == i else "( ) ")
+            self.wr("(*) " if self.choice == i else "( ) ")
             self.wr(t)
             i += 1
         self.attr_reset()
 
     def handle_mouse(self, x, y):
-        self.selected = y - self.y
+        self.choice = y - self.y
         self.redraw()
         self.signal("changed")
 
