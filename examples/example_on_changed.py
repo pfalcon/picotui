@@ -41,7 +41,7 @@ if __name__ == "__main__":
         d.add(30, 8, w_checkbox_val)
 
         def checkbox_changed(w):
-            w_checkbox_val.t = str(w.state)
+            w_checkbox_val.t = str(w.choice)
             w_checkbox_val.redraw()
         w_checkbox.on("changed", checkbox_changed)
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         d.add(30, 9, w_radio_val)
 
         def radio_changed(w):
-            w_radio_val.t = w.items[w.selected]
+            w_radio_val.t = w.items[w.choice]
             w_radio_val.redraw()
         w_radio.on("changed", radio_changed)
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         d.add(30, 11, w_listbox_val)
 
         def listbox_changed(w):
-            val = w.items[w.cur_line]
+            val = w.items[w.choice]
             w_listbox_val.t = val
             w_listbox_val.redraw()
         w_listbox.on("changed", listbox_changed)
