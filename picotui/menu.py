@@ -19,7 +19,7 @@ class WMenuBar(ItemSelWidget):
         self.goto(self.x, self.y)
         i = 0
         for name, pulldown in self.items:
-            if self.focus and i == self.selected:
+            if self.focus and i == self.choice:
                 self.attr_color(C_B_WHITE, C_BLACK)
             self.wr(b"  ")
             self.wr(name)
@@ -48,7 +48,7 @@ class WMenuBar(ItemSelWidget):
         while 1:
             res = None
             action = False
-            sel = self.items[self.selected][1]
+            sel = self.items[self.choice][1]
             if key == KEY_ESC:
                 self.close()
                 return ACTION_CANCEL
@@ -68,9 +68,9 @@ class WMenuBar(ItemSelWidget):
             else:
                 return
 
-            sel = self.items[self.selected][1]
+            sel = self.items[self.choice][1]
             if isinstance(sel, Widget) and self.pulled_down:
-                sel.set_xy(self.get_item_x(self.selected), self.y + 1)
+                sel.set_xy(self.get_item_x(self.choice), self.y + 1)
                 res = sel.loop()
                 if res == ACTION_PREV:
                     key = KEY_LEFT
@@ -108,7 +108,7 @@ class WMenuBar(ItemSelWidget):
             i += 1
         if not found:
             return
-        self.selected = i
+        self.choice = i
         self.redraw()
         return self.handle_key(KEY_ENTER)
 
@@ -129,7 +129,7 @@ class WMenuBox(ItemSelWidget):
         i = 0
         for item in self.items:
             self.goto(self.x + 1, self.y + i + 1)
-            if i == self.selected:
+            if i == self.choice:
                 self.attr_color(C_B_WHITE, C_BLACK)
             self.wr_fixedw(item[0], self.w - 2)
             self.attr_reset()
@@ -147,12 +147,12 @@ class WMenuBox(ItemSelWidget):
         elif key == KEY_RIGHT:
             return ACTION_NEXT
         elif key == KEY_ENTER:
-            return self.items[self.selected][1]
+            return self.items[self.choice][1]
 
     def handle_mouse(self, x, y):
         if not self.inside(x, y):
             return ACTION_CANCEL
         y -= self.y + 1
         if 0 <= y < self.h - 2:
-            self.selected = y
-            return self.items[self.selected][1]
+            self.choice = y
+            return self.items[self.choice][1]
