@@ -133,6 +133,21 @@ class WLabel(Widget):
         self.wr_fixedw(self.t, self.w)
 
 
+class WFrame(Widget):
+
+    def __init__(self, w, h, title=""):
+        self.w = w
+        self.h = h
+        self.t = title
+
+    def redraw(self):
+        self.draw_box(self.x, self.y, self.w, self.h)
+        if self.t:
+            pos = 1
+            self.goto(self.x + pos, self.y)
+            self.wr(" %s " % self.t)
+
+
 class WButton(Widget):
 
     focusable = True
@@ -177,21 +192,6 @@ class WButton(Widget):
 
     def on_click(self):
         pass
-
-
-class WFrame(Widget):
-
-    def __init__(self, w, h, title=""):
-        self.w = w
-        self.h = h
-        self.t = title
-
-    def redraw(self):
-        self.draw_box(self.x, self.y, self.w, self.h)
-        if self.t:
-            pos = 1
-            self.goto(self.x + pos, self.y)
-            self.wr(" %s " % self.t)
 
 
 class WCheckbox(ChoiceWidget):
