@@ -80,7 +80,17 @@ class Widget(Screen):
                 return res
 
 
-class ChoiceWidget(Widget):
+class FocusableWidget(Widget):
+    # If set to non-False, pressing Enter on this widget finishes
+    # dialog, with Dialog.loop() return value being this value.
+    finish_dialog = False
+
+
+class EditableWidget(FocusableWidget):
+    pass
+
+
+class ChoiceWidget(EditableWidget):
 
     def __init__(self, choice):
         super().__init__()
