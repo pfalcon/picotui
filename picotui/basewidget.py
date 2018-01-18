@@ -82,7 +82,9 @@ class FocusableWidget(Widget):
 
 
 class EditableWidget(FocusableWidget):
-    pass
+
+    def get(self):
+        raise NotImplementedError
 
 
 class ChoiceWidget(EditableWidget):
@@ -90,6 +92,9 @@ class ChoiceWidget(EditableWidget):
     def __init__(self, choice):
         super().__init__()
         self.choice = choice
+
+    def get(self):
+        return self.choice
 
 
 # Widget with few internal selectable items
