@@ -59,7 +59,7 @@ class Dialog(Widget):
     def find_focusable_by_idx(self, from_idx, direction):
         sz = len(self.childs)
         while 0 <= from_idx < sz:
-            if self.childs[from_idx].focusable:
+            if isinstance(self.childs[from_idx], FocusableWidget):
                 return from_idx, self.childs[from_idx]
             from_idx = (from_idx + direction) % sz
         return None, None
@@ -67,7 +67,7 @@ class Dialog(Widget):
     def find_focusable_by_xy(self, x, y):
         i = 0
         for w in self.childs:
-            if w.focusable and w.inside(x, y):
+            if isinstance(w, FocusableWidget) and w.inside(x, y):
                 return i, w
             i += 1
         return None, None
@@ -148,9 +148,7 @@ class WFrame(Widget):
             self.wr(" %s " % self.t)
 
 
-class WButton(Widget):
-
-    focusable = True
+class WButton(FocusableWidget):
 
     def __init__(self, w, text):
         Widget.__init__(self)
@@ -196,8 +194,6 @@ class WButton(Widget):
 
 class WCheckbox(ChoiceWidget):
 
-    focusable = True
-
     def __init__(self, title, choice=False):
         super().__init__(choice)
         self.t = title
@@ -232,8 +228,6 @@ class WCheckbox(ChoiceWidget):
 
 class WRadioButton(ItemSelWidget):
 
-    focusable = True
-
     def __init__(self, items):
         super().__init__(items)
         self.h = len(items)
@@ -264,8 +258,6 @@ class WRadioButton(ItemSelWidget):
 
 
 class WListBox(EditorExt, ChoiceWidget):
-
-    focusable = True
 
     def __init__(self, w, h, items):
         EditorExt.__init__(self)
@@ -359,8 +351,6 @@ class WPopupList(Dialog):
 
 class WDropDown(ChoiceWidget):
 
-    focusable = True
-
     def __init__(self, w, items, *, dropdown_h=5):
         super().__init__(0)
         self.items = items
@@ -391,12 +381,10 @@ class WDropDown(ChoiceWidget):
         self.handle_mouse(0, 0)
 
 
-class WTextEntry(EditorExt):
-
-    focusable = True
+class WTextEntry(EditorExt, EditableWidget):
 
     def __init__(self, w, text):
-        super().__init__(width=w, height=1)
+        EditorExt.__init__(self, width=w, height=1)
         self.t = text
         self.h = 1
         self.w = w
@@ -449,12 +437,10 @@ class WTextEntry(EditorExt):
         self.attr_reset()
 
 
-class WMultiEntry(EditorExt):
-
-    focusable = True
+class WMultiEntry(EditorExt, EditableWidget):
 
     def __init__(self, w, h, lines):
-        super().__init__(width=w, height=h)
+        EditorExt.__init__(self, width=w, height=h)
         self.h = h
         self.w = w
         self.focus = False
