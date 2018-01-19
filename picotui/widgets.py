@@ -508,7 +508,7 @@ class WCompletionList(WPopupList):
         chk = WCheckbox("Prefix")
         def is_prefix_changed(wid):
             main = self.main_widget
-            choices = main.get_choices(main.get_text(), wid.state)
+            choices = main.get_choices(main.get_text(), wid.choice)
             self.list.set_lines(choices)
             self.list.top_line = 0
             self.list.cur_line = 0
