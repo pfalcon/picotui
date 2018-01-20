@@ -29,7 +29,7 @@ class DTextEntry(Dialog):
     def result(self):
         res = self.loop()
         if res == ACTION_OK:
-            return self.entry.get_text()
+            return self.entry.get()
 
 
 class DMultiEntry(Dialog):

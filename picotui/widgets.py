@@ -389,15 +389,15 @@ class WTextEntry(EditorExt, EditableWidget):
         self.h = 1
         self.w = w
         self.focus = False
-        self.set_text(text)
+        self.set(text)
         self.col = len(text)
         self.adjust_cursor_eol()
         self.just_started = True
 
-    def get_text(self):
+    def get(self):
         return self.get_cur_line()
 
-    def set_text(self, text):
+    def set(self, text):
         self.set_lines([text])
 
     def handle_cursor_keys(self, key):
@@ -473,7 +473,7 @@ class WComboBox(WTextEntry):
         return self.items
 
     def show_popup(self):
-        choices = self.get_choices(self.get_text())
+        choices = self.get_choices(self.get())
         popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, self.popup_h, choices)
         popup.main_widget = self
         res = popup.loop()
@@ -508,7 +508,7 @@ class WCompletionList(WPopupList):
         chk = WCheckbox("Prefix")
         def is_prefix_changed(wid):
             main = self.main_widget
-            choices = main.get_choices(main.get_text(), wid.choice)
+            choices = main.get_choices(main.get(), wid.choice)
             self.list.set_lines(choices)
             self.list.top_line = 0
             self.list.cur_line = 0
