@@ -449,6 +449,9 @@ class WMultiEntry(EditorExt, EditableWidget):
     def get(self):
         return self.content
 
+    def set(self, lines):
+        self.set_lines(lines)
+
     def show_line(self, l, i):
         self.attr_color(C_BLACK, C_CYAN)
         super().show_line(l, i)
