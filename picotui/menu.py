@@ -1,5 +1,6 @@
-from .screen import *
+from .screen import Screen
 from .basewidget import *
+from .defs import *
 
 
 class WMenuBar(ItemSelWidget):
