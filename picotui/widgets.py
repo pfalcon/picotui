@@ -1,6 +1,29 @@
 from .basewidget import *
 from .editorext import *
+from .defs import *
 
+
+__all__ = (
+    "ACTION_OK",
+    "ACTION_CANCEL",
+    "ACTION_NEXT",
+    "ACTION_PREV",
+    "EditableWidget",
+    "Dialog",
+    "WLabel",
+    "WFrame",
+    "WButton",
+    "WCheckbox",
+    "WRadioButton",
+    "WListBox",
+    "WPopupList",
+    "WDropDown",
+    "WTextEntry",
+    "WMultiEntry",
+    "WComboBox",
+    "WCompletionList",
+    "WAutoComplete",
+)
 
 class Dialog(Widget):
 
