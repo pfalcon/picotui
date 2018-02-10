@@ -23,6 +23,7 @@ __all__ = (
     "WComboBox",
     "WCompletionList",
     "WAutoComplete",
+    "WFillbox",
 )
 
 class Dialog(Widget):
