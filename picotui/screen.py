@@ -1,5 +1,6 @@
 import os
 import signal
+from .defs import *
 
 
 class Screen:

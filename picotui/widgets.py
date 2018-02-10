@@ -23,6 +23,7 @@ __all__ = (
     "WComboBox",
     "WCompletionList",
     "WAutoComplete",
+    "WFillbox",
 )
 
 class Dialog(Widget):
@@ -164,17 +165,21 @@ class WLabel(Widget):
 
 class WFrame(Widget):
 
-    def __init__(self, w, h, title=""):
+    def __init__(self, w, h, title="", fcolor=C_WHITE, bcolor=C_BLACK):
         self.w = w
         self.h = h
         self.t = title
+        self.fcolor = fcolor
+        self.bcolor = bcolor
 
     def redraw(self):
-        self.draw_box(self.x, self.y, self.w, self.h)
+        self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor)
         if self.t:
             pos = 1
             self.goto(self.x + pos, self.y)
+            self.attr_color(self.fcolor, self.bcolor)
             self.wr(" %s " % self.t)
+            self.attr_reset()
 
 
 class WButton(FocusableWidget):
@@ -254,7 +259,7 @@ class WCheckbox(ChoiceWidget):
             self.attr_color(self.ffcolor, self.fbcolor)
         else:
             self.attr_color(self.fcolor, self.bcolor)
-        self.wr("[x] " if self.state else "[ ] ")
+        self.wr("[x] " if self.choice else "[ ] ")
         self.wr(self.t)
         self.attr_reset()
 
@@ -367,7 +372,7 @@ class WListBox(EditorExt, ChoiceWidget):
     def set_cursor(self):
         Widget.set_cursor(self)
 
-    def cursor(self, state):
+    def cursor(self, choice):
         # Force off
         super().cursor(False)
 
