@@ -258,7 +258,7 @@ class WCheckbox(ChoiceWidget):
             self.attr_color(self.ffcolor, self.fbcolor)
         else:
             self.attr_color(self.fcolor, self.bcolor)
-        self.wr("[x] " if self.state else "[ ] ")
+        self.wr("[x] " if self.choice else "[ ] ")
         self.wr(self.t)
         self.attr_reset()
 
@@ -371,7 +371,7 @@ class WListBox(EditorExt, ChoiceWidget):
     def set_cursor(self):
         Widget.set_cursor(self)
 
-    def cursor(self, state):
+    def cursor(self, choice):
         # Force off
         super().cursor(False)
 
