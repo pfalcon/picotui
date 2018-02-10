@@ -1,6 +1,29 @@
 from .basewidget import *
 from .editorext import *
+from .defs import *
 
+
+__all__ = (
+    "ACTION_OK",
+    "ACTION_CANCEL",
+    "ACTION_NEXT",
+    "ACTION_PREV",
+    "EditableWidget",
+    "Dialog",
+    "WLabel",
+    "WFrame",
+    "WButton",
+    "WCheckbox",
+    "WRadioButton",
+    "WListBox",
+    "WPopupList",
+    "WDropDown",
+    "WTextEntry",
+    "WMultiEntry",
+    "WComboBox",
+    "WCompletionList",
+    "WAutoComplete",
+)
 
 class Dialog(Widget):
 
@@ -61,7 +84,7 @@ class Dialog(Widget):
     def find_focusable_by_idx(self, from_idx, direction):
         sz = len(self.childs)
         while 0 <= from_idx < sz:
-            if self.childs[from_idx].focusable:
+            if isinstance(self.childs[from_idx], FocusableWidget):
                 return from_idx, self.childs[from_idx]
             from_idx = (from_idx + direction) % sz
         return None, None
@@ -69,7 +92,7 @@ class Dialog(Widget):
     def find_focusable_by_xy(self, x, y):
         i = 0
         for w in self.childs:
-            if w.focusable and w.inside(x, y):
+            if isinstance(w, FocusableWidget) and w.inside(x, y):
                 return i, w
             i += 1
         return None, None
@@ -139,9 +162,22 @@ class WLabel(Widget):
         self.attr_reset()
 
 
-class WButton(Widget):
+class WFrame(Widget):
 
-    focusable = True
+    def __init__(self, w, h, title=""):
+        self.w = w
+        self.h = h
+        self.t = title
+
+    def redraw(self):
+        self.draw_box(self.x, self.y, self.w, self.h)
+        if self.t:
+            pos = 1
+            self.goto(self.x + pos, self.y)
+            self.wr(" %s " % self.t)
+
+
+class WButton(FocusableWidget):
 
     def __init__(self, w, text, fcolor=C_BLACK, bcolor=C_GREEN, ffcolor=C_B_WHITE, fbcolor=C_GREEN):
         Widget.__init__(self)
@@ -188,26 +224,6 @@ class WButton(Widget):
     def on_click(self):
         pass
 
-
-class WFrame(Widget):
-
-    def __init__(self, w, h, title="", fcolor=C_WHITE, bcolor=C_BLACK):
-        self.w = w
-        self.h = h
-        self.t = title
-        self.fcolor = fcolor
-        self.bcolor = bcolor
-
-    def redraw(self):
-        self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor)
-        if self.t:
-            pos = 1
-            self.goto(self.x + pos, self.y)
-            self.attr_color(self.fcolor, self.bcolor)
-            self.wr(" %s " % self.t)
-            self.attr_reset()
-
-
 class WFillbox(Widget):
 
     def __init__(self, w, h, fcolor=C_WHITE, bcolor=C_BLACK):
@@ -219,22 +235,19 @@ class WFillbox(Widget):
     def redraw(self):
         self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor, fill=True)
 
-class WCheckbox(Widget):
+class WCheckbox(ChoiceWidget):
 
-    focusable = True
-
-    def __init__(self, title, state=False, fcolor=C_WHITE, bcolor=C_BLACK, ffcolor=C_B_BLUE, fbcolor=C_BLACK):
-        super().__init__()
+    def __init__(self, title, choice=False, fcolor=C_WHITE, bcolor=C_BLACK, ffcolor=C_B_BLUE, fbcolor=C_BLACK):
+        super().__init__(choice)
         self.t = title
         self.h = 1
         self.w = 4 + len(title)
-        self.state = state
+        self.focus = False
         self.fcolor = fcolor
         self.bcolor = bcolor
         self.ffcolor = ffcolor
         self.fbcolor = fbcolor
-        self.focus = False
-
+    
     def redraw(self):
         self.goto(self.x, self.y)
         if self.focus:
@@ -246,7 +259,7 @@ class WCheckbox(Widget):
         self.attr_reset()
 
     def flip(self):
-        self.state = not self.state
+        self.choice = not self.choice
         self.redraw()
         self.signal("changed")
 
@@ -261,10 +274,7 @@ class WCheckbox(Widget):
         if key == b" ":
             self.flip()
 
-
 class WRadioButton(ItemSelWidget):
-
-    focusable = True
 
     def __init__(self, items, fcolor=C_WHITE, bcolor=C_BLACK, ffcolor=C_B_BLUE, fbcolor=C_BLACK):
         super().__init__(items)
@@ -284,13 +294,13 @@ class WRadioButton(ItemSelWidget):
             self.attr_color(self.fcolor, self.bcolor)
         for t in self.items:
             self.goto(self.x, self.y + i)
-            self.wr("(*) " if self.selected == i else "( ) ")
+            self.wr("(*) " if self.choice == i else "( ) ")
             self.wr(t)
             i += 1
         self.attr_reset()
 
     def handle_mouse(self, x, y):
-        self.selected = y - self.y
+        self.choice = y - self.y
         self.redraw()
         self.signal("changed")
 
@@ -301,14 +311,12 @@ class WRadioButton(ItemSelWidget):
             self.move_sel(1)
 
 
-class WListBox(EditorExt):
-
-    focusable = True
+class WListBox(EditorExt, ChoiceWidget):
 
     def __init__(self, w, h, items, fcolor = C_WHITE, bcolor = C_BLACK, scolor = C_GREEN):
         EditorExt.__init__(self)
+        ChoiceWidget.__init__(self, 0)
         self.items = items
-        self.choice = 0
         self.width = w
         self.w = w
         self.height = h
@@ -341,12 +349,14 @@ class WListBox(EditorExt):
 
     def handle_mouse(self, x, y):
         res = super().handle_mouse(x, y)
+        self.choice = self.cur_line
         self.redraw()
         self.signal("changed")
         return res
 
     def handle_key(self, key):
         res = super().handle_key(key)
+        self.choice = self.cur_line
         self.redraw()
         self.signal("changed")
         return res
@@ -397,14 +407,11 @@ class WPopupList(Dialog):
         return self.list.content[self.list.cur_line]
 
 
-class WDropDown(Widget):
-
-    focusable = True
+class WDropDown(ChoiceWidget):
 
     def __init__(self, w, items, *, dropdown_h=5, fcolor=C_WHITE, bcolor=C_BLACK, scolor=C_CYAN, afcolor=C_WHITE, abcolor=C_BLACK):
-        Widget.__init__(self)
+        super().__init__(0)
         self.items = items
-        self.choice = 0
         self.h = 1
         self.w = w
         self.dropdown_h = dropdown_h
@@ -436,27 +443,25 @@ class WDropDown(Widget):
         self.handle_mouse(0, 0)
 
 
-class WTextEntry(EditorExt):
-
-    focusable = True
+class WTextEntry(EditorExt, EditableWidget):
 
     def __init__(self, w, text, fcolor=C_WHITE, bcolor=C_CYAN):
-        super().__init__(width=w, height=1)
+        EditorExt.__init__(self, width=w, height=1)
         self.t = text
         self.h = 1
         self.w = w
         self.fcolor = fcolor
         self.bcolor = bcolor
         self.focus = False
-        self.set_text(text)
+        self.set(text)
         self.col = len(text)
         self.adjust_cursor_eol()
         self.just_started = True
 
-    def get_text(self):
+    def get(self):
         return self.get_cur_line()
 
-    def set_text(self, text):
+    def set(self, text):
         self.set_lines([text])
 
     def handle_cursor_keys(self, key):
@@ -496,18 +501,22 @@ class WTextEntry(EditorExt):
         self.attr_reset()
 
 
-class WMultiEntry(EditorExt):
-
-    focusable = True
+class WMultiEntry(EditorExt, EditableWidget):
 
     def __init__(self, w, h, lines, fcolor=C_BLACK, bcolor=C_CYAN):
-        super().__init__(width=w, height=h)
+        EditorExt.__init__(self, width=w, height=h)
         self.h = h
         self.w = w
         self.focus = False
         self.set_lines(lines)
         self.fcolor = fcolor
         self.bcolor = bcolor
+
+    def get(self):
+        return self.content
+
+    def set(self, lines):
+        self.set_lines(lines)
 
     def show_line(self, l, i):
         self.attr_color(self.fcolor, self.bcolor)
@@ -540,7 +549,7 @@ class WComboBox(WTextEntry):
         return self.items
 
     def show_popup(self):
-        choices = self.get_choices(self.get_text())
+        choices = self.get_choices(self.get())
         popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, self.popup_h, choices)
         popup.main_widget = self
         res = popup.loop()
@@ -575,7 +584,7 @@ class WCompletionList(WPopupList):
         chk = WCheckbox("Prefix")
         def is_prefix_changed(wid):
             main = self.main_widget
-            choices = main.get_choices(main.get_text(), wid.state)
+            choices = main.get_choices(main.get(), wid.choice)
             self.list.set_lines(choices)
             self.list.top_line = 0
             self.list.cur_line = 0

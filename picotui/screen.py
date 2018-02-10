@@ -1,6 +1,5 @@
 import os
-
-from .defs import *
+import signal
 
 
 class Screen:
@@ -165,3 +164,7 @@ class Screen:
     @classmethod
     def set_screen_redraw(cls, handler):
         cls.screen_redraw = handler
+
+    @classmethod
+    def set_screen_resize(cls, handler):
+        signal.signal(signal.SIGWINCH, lambda sig, stk: handler(cls))

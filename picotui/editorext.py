@@ -5,7 +5,6 @@
 #
 import sys
 import os
-from .screen import *
 from .editor import *
 
 
