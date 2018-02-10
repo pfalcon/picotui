@@ -172,7 +172,7 @@ class WFrame(Widget):
         self.bcolor = bcolor
 
     def redraw(self):
-        self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor))
+        self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor)
         if self.t:
             pos = 1
             self.goto(self.x + pos, self.y)
