@@ -23,13 +23,14 @@ __all__ = (
     "WComboBox",
     "WCompletionList",
     "WAutoComplete",
+    "WFillbox",
 )
 
 class Dialog(Widget):
 
     finish_on_esc = True
 
-    def __init__(self, x, y, w=0, h=0, title=""):
+    def __init__(self, x, y, w=0, h=0, title="", fcolor=C_WHITE, bcolor=C_BLACK):
         super().__init__()
         self.x = x
         self.y = y
@@ -38,6 +39,8 @@ class Dialog(Widget):
         self.title = ""
         if title:
             self.title = " %s " % title
+        self.fcolor = fcolor
+        self.bcolor = bcolor
         self.childs = []
         # On both sides
         self.border_w = 2
@@ -72,7 +75,7 @@ class Dialog(Widget):
 
         # Redraw widgets with cursor off
         self.cursor(False)
-        self.dialog_box(self.x, self.y, self.w, self.h, self.title)
+        self.dialog_box(self.x, self.y, self.w, self.h, self.title, self.fcolor, self.bcolor)
         for w in self.childs:
             w.redraw()
         # Then give widget in focus a chance to enable cursor
@@ -144,36 +147,44 @@ class Dialog(Widget):
 
 class WLabel(Widget):
 
-    def __init__(self, text, w=0):
+    def __init__(self, text, w=0, fcolor=C_WHITE, bcolor=C_BLACK):
         self.t = text
         self.h = 1
         self.w = w
+        self.fcolor = fcolor
+        self.bcolor = bcolor
         if not w:
             self.w = len(text)
 
     def redraw(self):
         self.goto(self.x, self.y)
+        self.attr_color(self.fcolor, self.bcolor)
         self.wr_fixedw(self.t, self.w)
+        self.attr_reset()
 
 
 class WFrame(Widget):
 
-    def __init__(self, w, h, title=""):
+    def __init__(self, w, h, title="", fcolor=C_WHITE, bcolor=C_BLACK):
         self.w = w
         self.h = h
         self.t = title
+        self.fcolor = fcolor
+        self.bcolor = bcolor
 
     def redraw(self):
-        self.draw_box(self.x, self.y, self.w, self.h)
+        self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor)
         if self.t:
             pos = 1
             self.goto(self.x + pos, self.y)
+            self.attr_color(self.fcolor, self.bcolor)
             self.wr(" %s " % self.t)
+            self.attr_reset()
 
 
 class WButton(FocusableWidget):
 
-    def __init__(self, w, text):
+    def __init__(self, w, text, fcolor=C_BLACK, bcolor=C_GREEN, ffcolor=C_B_WHITE, fbcolor=C_GREEN):
         Widget.__init__(self)
         self.t = text
         self.h = 1
@@ -181,6 +192,10 @@ class WButton(FocusableWidget):
         self.disabled = False
         self.focus = False
         self.finish_dialog = False
+        self.fcolor = fcolor
+        self.bcolor = bcolor
+        self.ffcolor = ffcolor
+        self.fbcolor = fbcolor
 
     def redraw(self):
         self.goto(self.x, self.y)
@@ -188,9 +203,9 @@ class WButton(FocusableWidget):
             self.attr_color(C_WHITE, C_GRAY)
         else:
             if self.focus:
-                self.attr_color(C_B_WHITE, C_GREEN)
+                self.attr_color(self.ffcolor, self.fbcolor)
             else:
-                self.attr_color(C_BLACK, C_GREEN)
+                self.attr_color(self.fcolor, self.bcolor)
         self.wr(self.t.center(self.w))
         self.attr_reset()
 
@@ -214,20 +229,36 @@ class WButton(FocusableWidget):
     def on_click(self):
         pass
 
+class WFillbox(Widget):
+
+    def __init__(self, w, h, fcolor=C_WHITE, bcolor=C_BLACK):
+        self.w = w
+        self.h = h
+        self.fcolor = fcolor
+        self.bcolor = bcolor
+        
+    def redraw(self):
+        self.draw_box(self.x, self.y, self.w, self.h, self.fcolor, self.bcolor, fill=True)
 
 class WCheckbox(ChoiceWidget):
 
-    def __init__(self, title, choice=False):
+    def __init__(self, title, choice=False, fcolor=C_WHITE, bcolor=C_BLACK, ffcolor=C_B_BLUE, fbcolor=C_BLACK):
         super().__init__(choice)
         self.t = title
         self.h = 1
         self.w = 4 + len(title)
         self.focus = False
-
+        self.fcolor = fcolor
+        self.bcolor = bcolor
+        self.ffcolor = ffcolor
+        self.fbcolor = fbcolor
+    
     def redraw(self):
         self.goto(self.x, self.y)
         if self.focus:
-            self.attr_color(C_B_BLUE, None)
+            self.attr_color(self.ffcolor, self.fbcolor)
+        else:
+            self.attr_color(self.fcolor, self.bcolor)
         self.wr("[x] " if self.choice else "[ ] ")
         self.wr(self.t)
         self.attr_reset()
@@ -248,19 +279,24 @@ class WCheckbox(ChoiceWidget):
         if key == b" ":
             self.flip()
 
-
 class WRadioButton(ItemSelWidget):
 
-    def __init__(self, items):
+    def __init__(self, items, fcolor=C_WHITE, bcolor=C_BLACK, ffcolor=C_B_BLUE, fbcolor=C_BLACK):
         super().__init__(items)
         self.h = len(items)
         self.w = 4 + self.longest(items)
+        self.fcolor = fcolor
+        self.bcolor = bcolor
+        self.ffcolor = ffcolor
+        self.fbcolor = fbcolor
         self.focus = False
 
     def redraw(self):
         i = 0
         if self.focus:
-            self.attr_color(C_B_BLUE, None)
+            self.attr_color(self.ffcolor, self.fbcolor)
+        else:
+            self.attr_color(self.fcolor, self.bcolor)
         for t in self.items:
             self.goto(self.x, self.y + i)
             self.wr("(*) " if self.choice == i else "( ) ")
@@ -282,7 +318,7 @@ class WRadioButton(ItemSelWidget):
 
 class WListBox(EditorExt, ChoiceWidget):
 
-    def __init__(self, w, h, items):
+    def __init__(self, w, h, items, fcolor = C_WHITE, bcolor = C_BLACK, scolor = C_GREEN):
         EditorExt.__init__(self)
         ChoiceWidget.__init__(self, 0)
         self.items = items
@@ -292,6 +328,9 @@ class WListBox(EditorExt, ChoiceWidget):
         self.h = h
         self.set_lines(items)
         self.focus = False
+        self.fcolor = fcolor
+        self.bcolor = bcolor
+        self.scolor = scolor
 
     def render_line(self, l):
         # Default identity implementation is suitable for
@@ -302,15 +341,16 @@ class WListBox(EditorExt, ChoiceWidget):
         hlite = self.cur_line == i
         if hlite:
             if self.focus:
-                self.attr_color(C_B_WHITE, C_GREEN)
+                self.attr_color(self.fcolor, self.scolor)
             else:
-                self.attr_color(C_BLACK, C_GREEN)
+                self.attr_color(C_BLACK, self.scolor)
+        else:
+            self.attr_color(self.fcolor, self.bcolor)
         if i != -1:
             l = self.render_line(l)[:self.width]
             self.wr(l)
         self.clear_num_pos(self.width - len(l))
-        if hlite:
-            self.attr_reset()
+        self.attr_reset()
 
     def handle_mouse(self, x, y):
         res = super().handle_mouse(x, y)
@@ -332,7 +372,7 @@ class WListBox(EditorExt, ChoiceWidget):
     def set_cursor(self):
         Widget.set_cursor(self)
 
-    def cursor(self, state):
+    def cursor(self, choice):
         # Force off
         super().cursor(False)
 
@@ -374,23 +414,27 @@ class WPopupList(Dialog):
 
 class WDropDown(ChoiceWidget):
 
-    def __init__(self, w, items, *, dropdown_h=5):
+    def __init__(self, w, items, *, dropdown_h=5, fcolor=C_WHITE, bcolor=C_BLACK, scolor=C_CYAN, afcolor=C_WHITE, abcolor=C_BLACK):
         super().__init__(0)
         self.items = items
         self.h = 1
         self.w = w
         self.dropdown_h = dropdown_h
         self.focus = False
-
+        self.scolor = scolor
+        self.afcolor = afcolor
+        self.abcolor = abcolor
+        
     def redraw(self):
         self.goto(self.x, self.y)
         if self.focus:
-            self.attr_color(C_B_WHITE, C_CYAN)
+            self.attr_color(C_B_WHITE, self.scolor)
         else:
-            self.attr_color(C_BLACK, C_CYAN)
+            self.attr_color(C_BLACK, self.scolor)
         self.wr_fixedw(self.items[self.choice], self.w - 1)
-        self.attr_reset()
+        self.attr_color(self.afcolor, self.abcolor)
         self.wr(DOWN_ARROW)
+        self.attr_reset()
 
     def handle_mouse(self, x, y):
         popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items)
@@ -406,11 +450,13 @@ class WDropDown(ChoiceWidget):
 
 class WTextEntry(EditorExt, EditableWidget):
 
-    def __init__(self, w, text):
+    def __init__(self, w, text, fcolor=C_WHITE, bcolor=C_CYAN):
         EditorExt.__init__(self, width=w, height=1)
         self.t = text
         self.h = 1
         self.w = w
+        self.fcolor = fcolor
+        self.bcolor = bcolor
         self.focus = False
         self.set(text)
         self.col = len(text)
@@ -452,22 +498,24 @@ class WTextEntry(EditorExt, EditableWidget):
 
     def show_line(self, l, i):
         if self.just_started:
-            fg = C_WHITE
+            fg = self.fcolor
         else:
             fg = C_BLACK
-        self.attr_color(fg, C_CYAN)
+        self.attr_color(fg, self.bcolor)
         super().show_line(l, i)
         self.attr_reset()
 
 
 class WMultiEntry(EditorExt, EditableWidget):
 
-    def __init__(self, w, h, lines):
+    def __init__(self, w, h, lines, fcolor=C_BLACK, bcolor=C_CYAN):
         EditorExt.__init__(self, width=w, height=h)
         self.h = h
         self.w = w
         self.focus = False
         self.set_lines(lines)
+        self.fcolor = fcolor
+        self.bcolor = bcolor
 
     def get(self):
         return self.content
@@ -476,7 +524,7 @@ class WMultiEntry(EditorExt, EditableWidget):
         self.set_lines(lines)
 
     def show_line(self, l, i):
-        self.attr_color(C_BLACK, C_CYAN)
+        self.attr_color(self.fcolor, self.bcolor)
         super().show_line(l, i)
         self.attr_reset()
 
@@ -486,16 +534,20 @@ class WComboBox(WTextEntry):
     popup_class = WPopupList
     popup_h = 5
 
-    def __init__(self, w, text, items):
+    def __init__(self, w, text, items, fcolor=C_WHITE, bcolor=C_BLACK, scolor=C_CYAN, afcolor=C_WHITE, abcolor=C_BLACK):
         # w - 1 width goes to Editor widget
         super().__init__(w - 1, text)
         # We have full requested width, will show arrow symbol as last char
         self.w = w
         self.items = items
+        self.afcolor = afcolor
+        self.abcolor = abcolor
 
     def redraw(self):
         self.goto(self.x + self.w - 1, self.y)
+        self.attr_color(self.afcolor, self.abcolor)
         self.wr(DOWN_ARROW)
+        self.attr_reset()
         super().redraw()
 
     def get_choices(self, substr):

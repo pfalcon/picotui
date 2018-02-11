@@ -126,7 +126,7 @@ class WMenuBox(ItemSelWidget):
         self.w = w + 2
 
     def redraw(self):
-        self.dialog_box(self.x, self.y, self.w, self.h)
+        self.dialog_box(self.x, self.y, self.w, self.h, C_WHITE, C_BLACK)
         i = 0
         for item in self.items:
             self.goto(self.x + 1, self.y + i + 1)
