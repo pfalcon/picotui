@@ -150,10 +150,18 @@ class WLabel(Widget):
         self.w = w
         if not w:
             self.w = len(text)
+        self.validate = False
+        self.valid = False
 
     def redraw(self):
         self.goto(self.x, self.y)
+        if self.validate:
+            if not self.valid:
+                self.attr_color(C_B_RED, None)
+            else:
+                self.attr_color(C_B_GREEN, None)
         self.wr_fixedw(self.t, self.w)
+        self.attr_reset()
 
 
 class WFrame(Widget):
