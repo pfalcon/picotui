@@ -11,6 +11,7 @@ __all__ = (
     "EditableWidget",
     "Dialog",
     "WLabel",
+    "WProgress",
     "WFrame",
     "WButton",
     "WCheckbox",
