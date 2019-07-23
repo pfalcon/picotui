@@ -2,7 +2,8 @@ picotui
 =======
 
 Picotui is a Text User Interface (TUI) widget library for Python3.
-It is known to work with CPython3 and MicroPython (Unix version is
+It is known to work with CPython3 and
+`Pycopy <https://github.com/pfalcon/pycopy>`_ (Unix version is
 officially supported for the latter), but should work with any
 Python3 implementation which allows to access stdin/stdout file
 descriptors.
@@ -48,7 +49,7 @@ Double that for attributes. So, transferring a complete screen to show
 to user would take 2 mins. If you draw the same screen twice (no changes in
 content), it would take 4 mins. ``curses`` library cuts that back to mere 2
 mins. So, alas, ``picotui`` doesn't use curses. That's based on the fact
-that picotui wants to be compatible with MicroPython, and its philosophy
+that picotui wants to be compatible with Pycopy, and its philosophy
 is minimalism - if it's possible to do screen output without ``curses``,
 let's do just that. It's also grounded in the fact that nobody uses
 300 baud modems any longer, most apps are run in a local terminal emulator
