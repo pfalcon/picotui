@@ -2,8 +2,9 @@
 # This example shows how to change the items of a ListBox widget
 # when the current selection of a DropDown widget changes.
 #
-from picotui.screen import *
+from picotui.screen import Screen
 from picotui.widgets import *
+from picotui.defs import *
 
 
 if __name__ == "__main__":
