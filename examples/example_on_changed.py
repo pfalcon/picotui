@@ -6,6 +6,7 @@
 from picotui.context import Context
 from picotui.screen import Screen
 from picotui.widgets import *
+from picotui.defs import *
 
 
 with Context():
