@@ -33,7 +33,9 @@ class Editor(Widget):
         val = 0
         if self.content:
             val = self.col + self.margin
-            val = min(val, len(self.content[self.cur_line]))
+            content = self.content[self.cur_line]
+            rendered = self.render_line(content)
+            val = min(val, len(rendered))
         if val > self.width - 1:
             self.margin = val - (self.width - 1)
             self.col = self.width - 1
@@ -41,6 +43,11 @@ class Editor(Widget):
         else:
             self.col = val - self.margin
             return False
+
+    def render_line(self, line):
+        # Default identity implementation is suitable for
+        # items being list of strings.
+        return line
 
     def set_lines(self, lines):
         self.content = lines

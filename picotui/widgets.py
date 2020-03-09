@@ -293,11 +293,6 @@ class WListBox(EditorExt, ChoiceWidget):
         self.set_lines(items)
         self.focus = False
 
-    def render_line(self, l):
-        # Default identity implementation is suitable for
-        # items being list of strings.
-        return l
-
     def show_line(self, l, i):
         hlite = self.cur_line == i
         if hlite:
