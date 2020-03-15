@@ -1,6 +1,6 @@
 #
 # Simple VT100 terminal text editor widget
-# Copyright (c) 2015 Paul Sokolovsky
+# Copyright (c) 2015-2020 Paul Sokolovsky
 # Distributed under MIT License
 #
 import sys
@@ -33,7 +33,10 @@ class Editor(Widget):
         val = 0
         if self.content:
             val = self.col + self.margin
-            val = min(val, len(self.content[self.cur_line]))
+            if val > 0:
+                # Note: adjust_cursor_eol() may be called from widgets
+                # where self.content is not guaranteed to be a str.
+                val = min(val, len(self.content[self.cur_line]))
         if val > self.width - 1:
             self.margin = val - (self.width - 1)
             self.col = self.width - 1
