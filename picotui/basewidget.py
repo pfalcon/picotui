@@ -1,14 +1,24 @@
 import os
+import sys
 
 from .screen import Screen
-from .defs import KEYMAP as _KEYMAP
 
+from .defs import KEYMAP as _KEYMAP, KEY_SCRLDN, KEY_SCRLUP
 
 # Standard widget result actions (as return from .loop())
 ACTION_OK = 1000
 ACTION_CANCEL = 1001
 ACTION_NEXT = 1002
 ACTION_PREV = 1003
+
+# Platform switch.
+is_micropython = False
+try:
+    if sys.implementation.name == "micropython":
+        is_micropython = True
+except:
+    pass
+
 
 class Widget(Screen):
 
@@ -59,6 +69,56 @@ class Widget(Screen):
 
         return key
 
+    def get_input_micropython(self):
+
+        # Read from interface/keyboard one byte each and match against function keys.
+        # https://github.com/robert-hh/Micropython-Editor/blob/master/pye.py
+
+        # Collect key strokes.
+        in_buffer = self.rd()
+
+        # When it's starting with ESC, it must be fct.
+        if in_buffer == '\x1b':
+            while True:
+                in_buffer += self.rd()
+
+                # Double ESC for the rescue.
+                if in_buffer == '\x1b\x1b':
+                    in_buffer = '\x1b'
+                    break
+
+                c = in_buffer[-1]
+                if c == '~' or (c.isalpha() and c != 'O'):
+                    break
+
+        # Use bytes representation.
+        keys = bytes(in_buffer, None)
+
+        # FIXME: Special handling for mice.
+        # Read 3 more characters.
+        if in_buffer.startswith('\x1b[M'):
+            mouse_fct = ord(self.rd())
+            mouse_x = ord(self.rd()) - 33
+            mouse_y = ord(self.rd()) - 33
+            if mouse_fct == 0x61:
+                return KEY_SCRLDN, 3
+            elif mouse_fct == 0x60:
+                return KEY_SCRLUP, 3
+            else:
+                # Set the cursor.
+                return [mouse_x, mouse_y]
+
+        # Resolve key.
+        elif keys in _KEYMAP:
+            key = _KEYMAP[keys]
+            return key
+
+        # This is just plain text.
+        elif ord(in_buffer[0]) >= 32:
+            return in_buffer
+
+        return keys
+
     def handle_input(self, inp):
         if isinstance(inp, list):
             res = self.handle_mouse(inp[0], inp[1])
@@ -69,7 +129,10 @@ class Widget(Screen):
     def loop(self):
         self.redraw()
         while True:
-            key = self.get_input()
+            if is_micropython:
+                key = self.get_input_micropython()
+            else:
+                key = self.get_input()
             res = self.handle_input(key)
 
             if res is not None and res is not True:

@@ -48,6 +48,8 @@ KEY_F7 = b'\x1b[18~'
 KEY_F8 = b'\x1b[19~'
 KEY_F9 = b'\x1b[20~'
 KEY_F10 = b'\x1b[21~'
+KEY_SCRLUP = const(0x1c)
+KEY_SCRLDN = const(0x1d)
 
 KEYMAP = {
 b"\x1b[A": KEY_UP,
@@ -62,6 +64,7 @@ b"\x1b[5~": KEY_PGUP,
 b"\x1b[6~": KEY_PGDN,
 b"\x03": KEY_QUIT,
 b"\r": KEY_ENTER,
+b"\n": KEY_ENTER,
 b"\x7f": KEY_BACKSPACE,
 b"\x1b[3~": KEY_DELETE,
 b"\x1b": KEY_ESC,
@@ -69,6 +72,8 @@ b"\x1bOP": KEY_F1,
 b"\x1bOQ": KEY_F2,
 b"\x1bOR": KEY_F3,
 b"\x1bOS": KEY_F4,
+b"\x1b[1;5A": KEY_SCRLUP, ## Ctrl-Up
+b"\x1b[1;5B": KEY_SCRLDN, ## Ctrl-Down
 }
 
 # Unicode symbols in UTF-8

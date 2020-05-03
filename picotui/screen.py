@@ -1,5 +1,18 @@
 import os
-import signal
+import sys
+try:
+    import signal
+except ImportError:
+    pass
+
+
+# Platform switch.
+is_micropython = False
+try:
+    if sys.implementation.name == "micropython":
+        is_micropython = True
+except:
+    pass
 
 
 class Screen:
@@ -9,7 +22,11 @@ class Screen:
         # TODO: When Python is 3.5, update this to use only bytes
         if isinstance(s, str):
             s = bytes(s, "utf-8")
-        os.write(1, s)
+
+        if is_micropython:
+            sys.stdout.write(s)
+        else:
+            os.write(1, s)
 
     @staticmethod
     def wr_fixedw(s, width):
@@ -19,6 +36,15 @@ class Screen:
         Screen.wr(" " * (width - len(s)))
         # Doesn't work here, as it doesn't advance cursor
         #Screen.clear_num_pos(width - len(s))
+
+    @staticmethod
+    def wr_centered(s, width):
+        fmt = '{:^' + str(width) + '}'
+        Screen.wr(fmt.format(s))
+
+    @staticmethod
+    def rd():
+        return sys.stdin.read(1)
 
     @staticmethod
     def cls():
@@ -118,14 +144,26 @@ class Screen:
 
     @classmethod
     def init_tty(cls):
-        import tty, termios
-        cls.org_termios = termios.tcgetattr(0)
-        tty.setraw(0)
+
+        if is_micropython:
+            from micropython import kbd_intr
+            kbd_intr(-1)
+
+        else:
+            import tty, termios
+            cls.org_termios = termios.tcgetattr(0)
+            tty.setraw(0)
 
     @classmethod
     def deinit_tty(cls):
-        import termios
-        termios.tcsetattr(0, termios.TCSANOW, cls.org_termios)
+
+        if is_micropython:
+            from micropython import kbd_intr
+            kbd_intr(3)
+
+        else:
+            import termios
+            termios.tcsetattr(0, termios.TCSANOW, cls.org_termios)
 
     @classmethod
     def enable_mouse(cls):
@@ -157,4 +195,7 @@ class Screen:
 
     @classmethod
     def set_screen_resize(cls, handler):
-        signal.signal(signal.SIGWINCH, lambda sig, stk: handler(cls))
+        try:
+            signal.signal(signal.SIGWINCH, lambda sig, stk: handler(cls))
+        except:
+            pass

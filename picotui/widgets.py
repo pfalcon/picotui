@@ -191,7 +191,7 @@ class WButton(FocusableWidget):
                 self.attr_color(C_B_WHITE, C_GREEN)
             else:
                 self.attr_color(C_BLACK, C_GREEN)
-        self.wr(self.t.center(self.w))
+        self.wr_centered(self.t, self.w)
         self.attr_reset()
 
     def handle_mouse(self, x, y):
