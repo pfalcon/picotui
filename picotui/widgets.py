@@ -285,13 +285,16 @@ class WListBox(EditorExt, ChoiceWidget):
     def __init__(self, w, h, items):
         EditorExt.__init__(self)
         ChoiceWidget.__init__(self, 0)
-        self.items = items
         self.width = w
         self.w = w
         self.height = h
         self.h = h
-        self.set_lines(items)
+        self.set_items(items)
         self.focus = False
+
+    def set_items(self, items):
+        self.items = items
+        self.set_lines(items)
 
     def render_line(self, l):
         # Default identity implementation is suitable for
