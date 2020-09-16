@@ -13,8 +13,6 @@ if __name__ == "__main__":
 
     # Set the list of all available DropDown choices
     choices = ["Green1", "Green2", "Green3", "Red1", "Red2", "Red3", "Yellow1", "Yellow2", "Yellow3"]
-    # Copy the list of DropDown choices to another list for modifications
-    fchoices = choices[:]
 
     try:
         s.init_tty()
@@ -30,21 +28,21 @@ if __name__ == "__main__":
         d.add(11, 1, w_dropdown)
 
         d.add(1, 3, "List:")
-        w_listbox = WListBox(16, 4, ["%s" % i for i in fchoices])
+        w_listbox = WListBox(16, 4, choices)
         d.add(1, 4, w_listbox)
 
         # Filter the ListBox based on the DropDown selection
         def dropdown_changed(w):
-            fchoices.clear()
-            for i in range(0, len(choices)):
+            new_choices = []
+            for i in range(len(choices)):
                 if w.items[w.choice] == "All" or w.items[w.choice] in choices[i]:
-                    fchoices.append(choices[i])
+                    new_choices.append(choices[i])
 
+            # As we're going to set completely new items, reset current/top item of the widget
             w_listbox.top_line = 0
             w_listbox.cur_line = 0
             w_listbox.row = 0
-            w_listbox.items = ["%s" % items for items in fchoices]
-            w_listbox.set_lines(w_listbox.items)
+            w_listbox.set_items(new_choices)
         w_dropdown.on("changed", dropdown_changed)
 
         b = WButton(8, "OK")
