@@ -42,7 +42,7 @@ if __name__ == "__main__":
             w_listbox.top_line = 0
             w_listbox.cur_line = 0
             w_listbox.row = 0
-            w_listbox.set_items(new_choices)
+            w_listbox.set_lines(new_choices)
         w_dropdown.on("changed", dropdown_changed)
 
         b = WButton(8, "OK")
