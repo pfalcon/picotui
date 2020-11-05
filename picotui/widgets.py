@@ -356,9 +356,10 @@ class WPopupList(Dialog):
                 # (Processed) mouse click finishes selection
                 return ACTION_OK
 
-    def __init__(self, x, y, w, h, items):
+    def __init__(self, x, y, w, h, items, sel_item=0):
         super().__init__(x, y, w, h)
         self.list = self.OneShotList(w - 2, h - 2, items)
+        self.list.cur_line = sel_item
         self.add(1, 1, self.list)
 
     def handle_mouse(self, x, y):
@@ -396,7 +397,7 @@ class WDropDown(ChoiceWidget):
         self.wr(DOWN_ARROW)
 
     def handle_mouse(self, x, y):
-        popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items)
+        popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items, self.choice)
         res = popup.loop()
         if res == ACTION_OK:
             self.choice = popup.get_choice()
