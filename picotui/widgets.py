@@ -514,6 +514,7 @@ class WComboBox(WTextEntry):
             val = popup.get_selected_value()
             if val is not None:
                 self.set_lines([val])
+                self.margin = 0
                 self.col = sys.maxsize
                 self.adjust_cursor_eol()
                 self.just_started = False
