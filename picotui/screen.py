@@ -130,12 +130,12 @@ class Screen:
     @classmethod
     def enable_mouse(cls):
         # Mouse reporting - X10 compatibility mode
-        cls.wr(b"\x1b[?9h")
+        cls.wr(b"\x1b[?1000h")
 
     @classmethod
     def disable_mouse(cls):
         # Mouse reporting - X10 compatibility mode
-        cls.wr(b"\x1b[?9l")
+        cls.wr(b"\x1b[?1000l")
 
     @classmethod
     def screen_size(cls):
