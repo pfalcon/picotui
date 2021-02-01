@@ -70,6 +70,8 @@ class Widget(Screen):
         self.redraw()
         while True:
             key = self.get_input()
+            if key is None:
+                continue
             res = self.handle_input(key)
 
             if res is not None and res is not True:
