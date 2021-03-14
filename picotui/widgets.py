@@ -14,6 +14,7 @@ __all__ = (
     "WFrame",
     "WButton",
     "WCheckbox",
+    "WMultiCheckbox",
     "WRadioButton",
     "WListBox",
     "WPopupList",
@@ -247,6 +248,58 @@ class WCheckbox(ChoiceWidget):
             return ACTION_NEXT
         if key == b" ":
             self.flip()
+
+
+class WMultiCheckbox(EditableWidget):
+
+    def __init__(self, items):
+        super().__init__()
+
+        self.items = items
+        self.curr = 0
+        self.selected = set()
+
+        self.h = len(items)
+        self.w = 5 + self.longest(items)
+        self.focus = False
+
+    def get(self):
+        return [self.items[i] for i in sorted(self.selected)]
+
+    def flip(self, i):
+        if i in self.selected:
+            self.selected.remove(i)
+        else:
+            self.selected.add(i)
+        self.redraw()
+        self.signal("changed")
+
+    def move_sel(self, direction):
+        self.curr = (self.curr + direction) % len(self.items)
+        self.redraw()
+
+    def redraw(self):
+        if self.focus:
+            self.attr_color(C_B_BLUE, None)
+        for i, t in enumerate(self.items):
+            self.goto(self.x, self.y + i)
+            self.wr(">" if i == self.curr else " ")
+            self.wr("[x] " if i in self.selected else "[ ] ")
+            self.wr(t)
+        self.attr_reset()
+
+    def handle_mouse(self, x, y):
+        self.curr = y - self.y
+        self.flip(self.curr)
+        self.redraw()
+
+    def handle_key(self, key):
+        if key == KEY_UP:
+            self.move_sel(-1)
+        elif key == KEY_DOWN:
+            self.move_sel(1)
+        elif key == b" ":
+            self.flip(self.curr)
 
 
 class WRadioButton(ItemSelWidget):
