@@ -52,8 +52,18 @@ class Widget(Screen):
                 key = key[0:1].encode()
         key = _KEYMAP.get(key, key)
 
-        if isinstance(key, bytes) and key.startswith(b"\x1b[M") and len(key) == 6:
-            if key[3] != 32:
+
+        # Handle mouse input.  The prefix '\x1b[M' signifies a mouse action.
+        #
+        # HACK/FIX:  The default MacOS terminal sends keycodes for a touchpad
+        # mouseclick in one swoop, so os.read() above pulls in both LB_DOWN
+        # and LB_UP keycodes. Catch it by looking for 6 and 12 byte codes.
+        if (
+            isinstance(key, bytes)
+            and key.startswith(b"\x1b[M")
+            and (len(key) == 6 or len(key) == 12)
+        ):
+            if key[3] != 32:  # LB_DOWN
                 return None
             row = key[5] - 33
             col = key[4] - 33
