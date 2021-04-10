@@ -100,7 +100,7 @@ class Dialog(Widget):
             return
         if self.focus_w:
             self.focus_w.focus = False
-            widget.signal('focusout')
+            self.focus_w.signal('focusout')
             self.focus_w.redraw()
         self.focus_w = widget
         widget.focus = True
