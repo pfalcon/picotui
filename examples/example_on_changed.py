@@ -89,6 +89,11 @@ with Context():
     w_radio.on("focusin",    functools.partial(update_focus, "radio"))
     w_checkbox.on("focusin", functools.partial(update_focus, "checkbox"))
 
+    w_listbox.on("focusout",  functools.partial(update_focus, ""))
+    w_dropdown.on("focusout", functools.partial(update_focus, ""))
+    w_radio.on("focusout",    functools.partial(update_focus, ""))
+    w_checkbox.on("focusout", functools.partial(update_focus, ""))
+
     b = WButton(8, "OK")
     d.add(10, 16, b)
     b.finish_dialog = ACTION_OK
