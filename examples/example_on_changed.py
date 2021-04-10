@@ -3,6 +3,7 @@
 # current state of widgets to other parts of an app (to other widgets
 # in this case).
 #
+import functools
 from picotui.context import Context
 from picotui.screen import Screen
 from picotui.widgets import *
@@ -75,6 +76,18 @@ with Context():
         w_listbox_val.redraw()
     w_listbox.on("changed", listbox_changed)
 
+    d.add(1, 12, "Focused element:")
+    w_focus_val = WLabel("", w=8)
+    d.add(30, 12, w_focus_val)
+
+    def update_focus(name, w):
+        w_focus_val.t = name
+        w_focus_val.redraw()
+
+    w_listbox.on("focusin",  functools.partial(update_focus, "listbox"))
+    w_dropdown.on("focusin", functools.partial(update_focus, "dropdown"))
+    w_radio.on("focusin",    functools.partial(update_focus, "radio"))
+    w_checkbox.on("focusin", functools.partial(update_focus, "checkbox"))
 
     b = WButton(8, "OK")
     d.add(10, 16, b)
