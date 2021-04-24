@@ -30,9 +30,9 @@ class WMenuBar(ItemSelWidget):
 
     def close(self):
         self.focus = False
+        self.screen_redraw(True)
         if self.permanent:
             self.redraw()
-        self.screen_redraw(True)
 
     def get_item_x(self, item_no):
         x = self.x
