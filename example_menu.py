@@ -51,17 +51,18 @@ def main_loop():
 
 with Context():
 
-    d = Dialog(10, 5, 40, 13)
-    d.add(1, 1, WLabel("Label:"))
-    d.add(1, 2, WListBox(16, 4, ["choice%d" % i for i in range(10)]))
-    d.add(1, 7, WDropDown(10, ["Red", "Green", "Yellow"]))
+    d = Dialog(10, 5, 40, 14)
+    d.add(12, 1, WLabel("Press F9 for menu"))
+    d.add(1, 2, WLabel("Label:"))
+    d.add(1, 3, WListBox(16, 4, ["choice%d" % i for i in range(10)]))
+    d.add(1, 8, WDropDown(10, ["Red", "Green", "Yellow"]))
 
     b = WButton(8, "OK")
-    d.add(3, 10, b)
+    d.add(10, 11, b)
     b.finish_dialog = ACTION_OK
 
     b = WButton(8, "Cancel")
-    d.add(20, 10, b)
+    d.add(23, 11, b)
     b.finish_dialog = ACTION_CANCEL
 
     screen_redraw(Screen)
