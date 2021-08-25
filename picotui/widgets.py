@@ -289,7 +289,8 @@ class WListBox(EditorExt, ChoiceWidget):
         self.w = w
         self.height = h
         self.h = h
-        self.set_items(items)
+        self.items = items
+        self.set_items(self.items)
         self.focus = False
 
     def set_items(self, items):
