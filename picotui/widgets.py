@@ -19,6 +19,7 @@ __all__ = (
     "WPopupList",
     "WDropDown",
     "WTextEntry",
+    "WPasswdEntry",
     "WMultiEntry",
     "WComboBox",
     "WCompletionList",
@@ -462,6 +463,12 @@ class WTextEntry(EditorExt, EditableWidget):
         self.attr_color(fg, C_CYAN)
         super().show_line(l, i)
         self.attr_reset()
+
+
+class WPasswdEntry(WTextEntry):
+
+    def show_line(self, l, i):
+        super().show_line("*" * len(l), i)
 
 
 class WMultiEntry(EditorExt, EditableWidget):
