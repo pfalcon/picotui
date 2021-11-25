@@ -27,6 +27,9 @@ with Context():
     d.add(1, 5, "Auto complete:")
     d.add(15, 5, WAutoComplete(8, "fo", ["foo", "foobar", "bar", "car", "dar"]))
 
+    d.add(1, 6, "Password:")
+    d.add(11, 6, WPasswdEntry(10, ""))
+
     d.add(1, 8, "Multiline:")
     d.add(1, 9, WMultiEntry(26, 3, ["Example", "Text"]))
 
