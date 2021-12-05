@@ -18,6 +18,23 @@ def add_ok_cancel_buttons(d):
     b.finish_dialog = ACTION_CANCEL
 
 
+def add_next_prev_buttons(d):
+    if d.h == 0:
+        d.autosize(0, 1)
+    if d.w < 20:
+        d.w = 20
+    hw = d.w // 2
+    off1 = (hw + 1) // 2 - 4
+    off2 = (d.w - hw) + hw // 2 - 4
+    b = WButton(8, "Next")
+    d.add(off1, d.h - 1, b)
+    b.finish_dialog = ACTION_NEXT
+
+    b = WButton(8, "Back")
+    d.add(off2, d.h - 1, b)
+    b.finish_dialog = ACTION_PREV
+
+
 class DTextEntry(Dialog):
 
     def __init__(self, entry_w, text, title=""):
@@ -49,8 +66,8 @@ class DMultiEntry(Dialog):
 
 class DConfirmation(Dialog):
 
-    def __init__(self, lines, title=""):
-        super().__init__(10, 5, title=title)
+    def __init__(self, x, y, entry_w, entry_h, lines, title=""):
+        super().__init__(x, y, entry_w, entry_h, title=title)
         if not isinstance(lines, list):
             lines = [lines]
         i = 1
