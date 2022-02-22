@@ -136,11 +136,12 @@ class Dialog(Widget):
     def handle_mouse(self, x, y):
         # Work in absolute coordinates
         if self.inside(x, y):
-            self.focus_idx, w = self.find_focusable_by_xy(x, y)
-#            print(w)
-            if w:
-                self.change_focus(w)
-                return w.handle_mouse(x, y)
+            idx, w = self.find_focusable_by_xy(x, y)
+            if isinstance(w, FocusableWidget):
+                self.focus_idx = idx
+                if w:
+                    self.change_focus(w)
+                    return w.handle_mouse(x, y)
 
 
 class WLabel(Widget):
