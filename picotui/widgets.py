@@ -47,9 +47,10 @@ class Dialog(Widget):
         self.focus_idx = -1
 
     def add(self, x, y, widget):
-        if isinstance(widget, str):
-            # Convert raw string to WLabel
-            widget = WLabel(widget)
+        if not isinstance(widget, Widget):
+            if not isinstance(widget, str):
+                widget = str( widget )
+            widget = WLabel( widget )
         widget.set_xy(self.x + x, self.y + y)
         self.childs.append(widget)
         widget.owner = self
