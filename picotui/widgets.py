@@ -47,9 +47,10 @@ class Dialog(Widget):
         self.focus_idx = -1
 
     def add(self, x, y, widget):
-        if isinstance(widget, str):
-            # Convert raw string to WLabel
-            widget = WLabel(widget)
+        if not isinstance(widget, Widget):
+            if not isinstance(widget, str):
+                widget = str( widget )
+            widget = WLabel( widget )
         widget.set_xy(self.x + x, self.y + y)
         self.childs.append(widget)
         widget.owner = self
@@ -136,11 +137,12 @@ class Dialog(Widget):
     def handle_mouse(self, x, y):
         # Work in absolute coordinates
         if self.inside(x, y):
-            self.focus_idx, w = self.find_focusable_by_xy(x, y)
-#            print(w)
-            if w:
-                self.change_focus(w)
-                return w.handle_mouse(x, y)
+            idx, w = self.find_focusable_by_xy(x, y)
+            if isinstance(w, FocusableWidget):
+                self.focus_idx = idx
+                if w:
+                    self.change_focus(w)
+                    return w.handle_mouse(x, y)
 
 
 class WLabel(Widget):
