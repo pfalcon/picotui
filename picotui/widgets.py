@@ -26,6 +26,7 @@ __all__ = (
     "WAutoComplete",
 )
 
+
 class Dialog(Widget):
 
     finish_on_esc = True
@@ -108,6 +109,8 @@ class Dialog(Widget):
         widget.set_cursor()
 
     def move_focus(self, direction):
+        if self.focus_idx is None:
+            self.focus_idx = 0
         prev_idx = (self.focus_idx + direction) % len(self.childs)
         self.focus_idx, new_w = self.find_focusable_by_idx(prev_idx, direction)
         self.change_focus(new_w)
@@ -137,14 +140,13 @@ class Dialog(Widget):
         # Work in absolute coordinates
         if self.inside(x, y):
             self.focus_idx, w = self.find_focusable_by_xy(x, y)
-#            print(w)
+            #            print(w)
             if w:
                 self.change_focus(w)
                 return w.handle_mouse(x, y)
 
 
 class WLabel(Widget):
-
     def __init__(self, text, w=0):
         self.t = text
         self.h = 1
@@ -158,7 +160,6 @@ class WLabel(Widget):
 
 
 class WFrame(Widget):
-
     def __init__(self, w, h, title=""):
         self.w = w
         self.h = h
@@ -173,7 +174,6 @@ class WFrame(Widget):
 
 
 class WButton(FocusableWidget):
-
     def __init__(self, w, text):
         Widget.__init__(self)
         self.t = text
@@ -217,7 +217,6 @@ class WButton(FocusableWidget):
 
 
 class WCheckbox(ChoiceWidget):
-
     def __init__(self, title, choice=False):
         super().__init__(choice)
         self.t = title
@@ -251,7 +250,6 @@ class WCheckbox(ChoiceWidget):
 
 
 class WRadioButton(ItemSelWidget):
-
     def __init__(self, items):
         super().__init__(items)
         self.h = len(items)
@@ -282,7 +280,6 @@ class WRadioButton(ItemSelWidget):
 
 
 class WListBox(EditorExt, ChoiceWidget):
-
     def __init__(self, w, h, items):
         EditorExt.__init__(self)
         ChoiceWidget.__init__(self, 0)
@@ -310,7 +307,7 @@ class WListBox(EditorExt, ChoiceWidget):
             else:
                 self.attr_color(C_BLACK, C_GREEN)
         if i != -1:
-            l = self.render_line(l)[:self.width]
+            l = self.render_line(l)[: self.width]
             self.wr(l)
         self.clear_num_pos(self.width - len(l))
         if hlite:
@@ -342,9 +339,7 @@ class WListBox(EditorExt, ChoiceWidget):
 
 
 class WPopupList(Dialog):
-
     class OneShotList(WListBox):
-
         def handle_key(self, key):
             if key == KEY_ENTER:
                 return ACTION_OK
@@ -378,7 +373,6 @@ class WPopupList(Dialog):
 
 
 class WDropDown(ChoiceWidget):
-
     def __init__(self, w, items, *, dropdown_h=5):
         super().__init__(0)
         self.items = items
@@ -398,7 +392,9 @@ class WDropDown(ChoiceWidget):
         self.wr(DOWN_ARROW)
 
     def handle_mouse(self, x, y):
-        popup = WPopupList(self.x, self.y + 1, self.w, self.dropdown_h, self.items, self.choice)
+        popup = WPopupList(
+            self.x, self.y + 1, self.w, self.dropdown_h, self.items, self.choice
+        )
         res = popup.loop()
         if res == ACTION_OK:
             self.choice = popup.get_choice()
@@ -410,7 +406,6 @@ class WDropDown(ChoiceWidget):
 
 
 class WTextEntry(EditorExt, EditableWidget):
-
     def __init__(self, w, text):
         EditorExt.__init__(self, width=w, height=1)
         self.t = text
@@ -466,13 +461,11 @@ class WTextEntry(EditorExt, EditableWidget):
 
 
 class WPasswdEntry(WTextEntry):
-
     def show_line(self, l, i):
         super().show_line("*" * len(l), i)
 
 
 class WMultiEntry(EditorExt, EditableWidget):
-
     def __init__(self, w, h, lines):
         EditorExt.__init__(self, width=w, height=h)
         self.h = h
@@ -514,7 +507,9 @@ class WComboBox(WTextEntry):
 
     def show_popup(self):
         choices = self.get_choices(self.get())
-        popup = self.popup_class(self.x, self.y + 1, self.longest(choices) + 2, self.popup_h, choices)
+        popup = self.popup_class(
+            self.x, self.y + 1, self.longest(choices) + 2, self.popup_h, choices
+        )
         popup.main_widget = self
         res = popup.loop()
         if res == ACTION_OK:
@@ -541,12 +536,12 @@ class WComboBox(WTextEntry):
 
 
 class WCompletionList(WPopupList):
-
     def __init__(self, x, y, w, h, items):
         Dialog.__init__(self, x, y, w, h)
         self.list = self.OneShotList(w - 2, h - 2, items)
         self.add(1, 1, self.list)
         chk = WCheckbox("Prefix")
+
         def is_prefix_changed(wid):
             main = self.main_widget
             choices = main.get_choices(main.get(), wid.choice)
@@ -555,6 +550,7 @@ class WCompletionList(WPopupList):
             self.list.cur_line = 0
             self.list.row = 0
             self.list.redraw()
+
         chk.on("changed", is_prefix_changed)
         self.add(1, h - 1, chk)
 
