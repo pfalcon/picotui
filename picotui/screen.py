@@ -6,7 +6,9 @@ class Screen:
 
     @staticmethod
     def wr(s):
-        assert isinstance(s, byte)
+        # TODO: Update this to use only bytes
+        if isinstance(s, str):
+            s = bytes(s, "utf-8")
         os.write(1, s)
 
     @staticmethod
